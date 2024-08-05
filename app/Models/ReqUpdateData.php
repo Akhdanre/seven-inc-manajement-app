@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class ReqUpdateData extends Model
 {
     use HasFactory;
+
+    protected $table = "req_update_data";
+    protected $primaryKey = "id";
+    protected $typeKey = "int";
+    public $timestamps = true;
+    public $incrementing = true;
+
+    protected $fillable = [
+        "kelas_id",
+        "mahasiswa_id",
+    ];
 }
