@@ -39,7 +39,7 @@ class AuthController extends Controller
         ]);
         switch ($user->role_id) {
             case 1:
-                return redirect("/kaprodi");
+                return redirect("/kaprodi/home");
                 break;
             case 2:
                 return redirect("/dosen");
