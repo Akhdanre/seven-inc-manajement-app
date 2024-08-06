@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthController::class, 'login']);
 Route::post('/actionLogin', [AuthController::class, 'actionLogin'])->name("actionLogin");
 
-Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
+Route::get('/dosen', [DosenController::class, 'dosenView']);
+// Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
 
 Route::get('/dosen/mahasiswa', function () {
     return view('dosen.mahasiswa');
@@ -56,3 +57,4 @@ Route::get('/kaprodi/add-dosen', function () {
 Route::get('/mahasiswa', function () {
     return view('mahasiswa.index');
 });
+

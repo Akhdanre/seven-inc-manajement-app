@@ -26,5 +26,17 @@ class DosenController extends Controller
 
         // Kembalikan view dengan data total
         return view('dosen.index', compact('totalKaprodi', 'totalDosen', 'totalKelas', 'totalMahasiswa'));
+        $dataUser = session("userData");
+        return view('kaprodi.index',  $dataUser);
+    }
+
+    public function dosenView(): View
+    {
+        $dataUser = session("userData");
+        $username = "ouken";
+        if($dataUser != null){
+            $username = $dataUser->username;
+        }
+        return view('dosen.index')->with(['data' => $username]);
     }
 }
