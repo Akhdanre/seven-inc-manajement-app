@@ -1,17 +1,17 @@
 <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
         <div class="p-6">
-            <a href="index.html" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">E-Data</a>
+            <a href="{{route('kaprodi.home')}}" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">E-Data</a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
-            <a href="index.html" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+            <a href="{{route('kaprodi.home')}}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
                 <i class="fas fa-tachometer-alt mr-3"></i>
                 Dashboard
             </a>
-            <a href="dosen.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+            <a href="{{route('kaprodi.data.dosen')}}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-sticky-note mr-3"></i>
                 Data Dosen
             </a>
-            <a href="kelas.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+            <a href="{{route('kaprodi.data.kelas')}}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-table mr-3"></i>
                 Data Kelas
             </a>
@@ -30,7 +30,7 @@
           
             <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
                 <div class="flex items-center mr-4">
-                    <p class="relative">Hai, Ahmad Ansori!</p>
+                    <p class="relative">Hai, {{$username}}!</p>
                 </div>
                 <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
                     <img src="https://cdn.vectorstock.com/i/500p/53/42/user-member-avatar-face-profile-icon-vector-22965342.jpg">
