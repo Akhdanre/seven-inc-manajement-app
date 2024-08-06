@@ -11,14 +11,16 @@ class DosenController extends Controller
     public function kaprodiView(): View
     {
         $dataUser = session("userData");
-        return view('kaprodi.index',  ['userData' => $dataUser]);
+        return view('kaprodi.index',  $dataUser);
     }
 
     public function dosenView(): View
     {
-        // $dataUser = session("userData");
-
+        $dataUser = session("userData");
         $username = "ouken";
-        return view('dosen.index', ["username" => $username]);
+        if($dataUser != null){
+            $username = $dataUser->username;
+        }
+        return view('dosen.index')->with(['data' => $username]);
     }
 }

@@ -49,7 +49,6 @@ class AuthController extends Controller
                 break;
             default:
                 return redirect("/");
-
                 break;
         }
     }

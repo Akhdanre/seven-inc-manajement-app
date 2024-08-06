@@ -21,39 +21,3 @@ Route::post('/actionLogin', [AuthController::class, 'actionLogin'])->name("actio
 
 
 Route::get('/dosen', [DosenController::class, 'dosenView']);
-
-Route::get('/dosen/mahasiswa', function () {
-    return view('dosen.mahasiswa');
-});
-
-Route::get('/dosen/add-mahasiswa', function () {
-    return view('dosen.add-mahasiswa');
-});
-
-Route::get('/dosen/edit-mahasiswa', function () {
-    return view('dosen.edit-mahasiswa');
-});
-
-Route::get('/kaprodi', function () {
-    return view('kaprodi.index');
-});
-
-Route::get('/kaprodi/kelas', function () {
-    return view('kaprodi.kelas');
-});
-
-Route::get('/kaprodi/dosen', function () {
-    return view('kaprodi.dosen');
-});
-
-Route::get('/kaprodi/add-kelas', function () {
-    return view('kaprodi.add-kelas');
-});
-
-Route::get('/kaprodi/add-dosen', function () {
-    return view('kaprodi.add-dosen');
-});
-
-Route::get('/mahasiswa', function () {
-    return view('mahasiswa.index');
-});

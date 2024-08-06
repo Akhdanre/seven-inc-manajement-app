@@ -2,7 +2,7 @@
 
 @section('contents')
 
-@include('layouts.sidebar-dosen')
+@include('layouts.sidebar-dosen', ['data' => $data])
 
 <div class="w-full overflow-x-hidden border-t flex flex-col">
     <main class="w-full flex-grow p-6">
@@ -16,7 +16,7 @@
                         23
                     </a>
                     <a href="#" class="no-underline text-lg">
-                        {{ $username }}
+                        Total kaprodi
                     </a>
                 </div>
             </div>
