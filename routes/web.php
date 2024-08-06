@@ -19,12 +19,42 @@ Route::get('/', [AuthController::class, 'login']);
 Route::post('/actionLogin', [AuthController::class, 'actionLogin'])->name("actionLogin");
 
 
-Route::get("/college/home", function () {
-    return view("testing");
+Route::get('/dosen', function () {
+    return view('dosen.index');
 });
-Route::get("/HSP/home", function () {
-    return view("page1");
+
+Route::get('/dosen/mahasiswa', function () {
+    return view('dosen.mahasiswa');
 });
-Route::get("/lecture/home", function () {
-    return view("page2");
+
+Route::get('/dosen/add-mahasiswa', function () {
+    return view('dosen.add-mahasiswa');
+});
+
+Route::get('/dosen/edit-mahasiswa', function () {
+    return view('dosen.edit-mahasiswa');
+});
+
+Route::get('/kaprodi', function () {
+    return view('kaprodi.index');
+});
+
+Route::get('/kaprodi/kelas', function () {
+    return view('kaprodi.kelas');
+});
+
+Route::get('/kaprodi/dosen', function () {
+    return view('kaprodi.dosen');
+});
+
+Route::get('/kaprodi/add-kelas', function () {
+    return view('kaprodi.add-kelas');
+});
+
+Route::get('/kaprodi/add-dosen', function () {
+    return view('kaprodi.add-dosen');
+});
+
+Route::get('/mahasiswa', function () {
+    return view('mahasiswa.index');
 });
