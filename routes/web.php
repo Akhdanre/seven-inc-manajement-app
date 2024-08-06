@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DosenController;
+use App\Http\Controllers\KaprodiController;
 use App\Http\Controllers\login_controller;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,8 @@ Route::post('/actionLogin', [AuthController::class, 'actionLogin'])->name("actio
 
 
 Route::get('/dosen', [DosenController::class, 'dosenView']);
+
+
+Route::get("/kaprodi/home", [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
+Route::get("/kaprodi/data/dosen",[KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
+Route::get("/kaprodi/data/kelas",[KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");
