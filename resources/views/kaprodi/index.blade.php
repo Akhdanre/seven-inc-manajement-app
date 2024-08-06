@@ -13,7 +13,7 @@
                 <div class="shadow-lg border-l-8 border-red-600 mb-2 p-2 md:w-1/4 mx-2">
                 <div class="p-4 flex flex-col">
                     <a href="#" class="no-underline text-2xl">
-                    23
+                    {{ $totalKaprodi }}
                     </a>
                     <a href="#" class="no-underline text-lg">
                     Total Kaprodi
@@ -24,7 +24,7 @@
                 <div class="shadow-lg border-l-8 border-blue-600 mb-2 p-2 md:w-1/4 mx-2">
                 <div class="p-4 flex flex-col">
                     <a href="#" class="no-underline text-2xl">
-                    834
+                    {{ $totalDosen }}
                     </a>
                     <a href="#" class="no-underline text-lg">
                     Total Dosen
@@ -35,7 +35,7 @@
                 <div class="shadow-lg border-l-8 border-yellow-600 mb-2 p-2 md:w-1/4 mx-2">
                 <div class="p-4 flex flex-col">
                     <a href="#" class="no-underline text-2xl">
-                    900
+                    {{ $totalKelas }}
                     </a>
                     <a href="#" class="no-underline text-lg">
                     Total Kelas
@@ -46,7 +46,7 @@
                 <div class="shadow-lg border-l-8 border-green-600 mb-2 p-2 md:w-1/4 mx-2">
                 <div class="p-4 flex flex-col">
                     <a href="#" class="no-underline text-2xl">
-                    500
+                    {{ $totalMahasiswa }}
                     </a>
                     <a href="#" class="no-underline text-lg">
                     Total Mahasiswa

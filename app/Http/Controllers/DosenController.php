@@ -2,23 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
+use App\Models\Dosen;
+use App\Models\Kelas;
+use App\Models\Mahasiswa;
 
 class DosenController extends Controller
 {
-
-
-    public function kaprodiView(): View
+    /**
+     * Menampilkan halaman indeks dengan total data Kaprodi, Dosen, Kelas, dan Mahasiswa.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
     {
-        $dataUser = session("userData");
-        return view('kaprodi.index',  ['userData' => $dataUser]);
-    }
+        // Hitung total Kaprodi (role_id 1) dan Dosen (role_id 2)
+        $totalKaprodi = Dosen::where('role_id', 1)->count();
+        $totalDosen = Dosen::where('role_id', 2)->count();
+        
+        // Hitung total Kelas dan Mahasiswa
+        $totalKelas = Kelas::count();
+        $totalMahasiswa = Mahasiswa::count();
 
-    public function dosenView(): View
-    {
-        // $dataUser = session("userData");
-
-        $username = "ouken";
-        return view('dosen.index', ["username" => $username]);
+        // Kembalikan view dengan data total
+        return view('dosen.index', compact('totalKaprodi', 'totalDosen', 'totalKelas', 'totalMahasiswa'));
     }
 }
