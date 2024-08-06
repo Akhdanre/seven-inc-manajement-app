@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\login_controller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MahasiswaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,4 @@ Route::get('/kaprodi/add-dosen', function () {
     return view('kaprodi.add-dosen');
 });
 
-Route::get('/mahasiswa', function () {
-    return view('mahasiswa.index');
-});
+Route::get('/mahasiswa', [MahasiswaController::class, 'index']);
