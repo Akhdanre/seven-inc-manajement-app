@@ -18,10 +18,20 @@ class KaprodiController extends Controller
     }
     public function kaprodiDataDosenView(): View
     {
-        return view('kaprodi.dosen');;
+        $username = "oukenze";
+        $session = session("userData");
+        if ($session != null) {
+            $username = $session->username;
+        }
+        return view('kaprodi.dosen')->with(["data" => $username]);
     }
     public function kaprodiDataKelasView(): View
     {
-        return view('kaprodi.kelas');
+        $username = "oukenze";
+        $session = session("userData");
+        if ($session != null) {
+            $username = $session->username;
+        }
+        return view('kaprodi.kelas')->with(["data" => $username]);
     }
 }
