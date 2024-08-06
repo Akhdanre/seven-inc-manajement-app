@@ -20,7 +20,7 @@ class UsersFactory extends Factory
         return [
             "username" => fake()->userName(),
             "email" => fake()->email(),
-            "password" => Hash::make(fake()->password()),
+            "password" => Hash::make("superone"),
             "role_id" => fake()->numberBetween(1, 3)
         ];
     }
