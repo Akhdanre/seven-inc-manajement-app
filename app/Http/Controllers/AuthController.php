@@ -34,18 +34,21 @@ class AuthController extends Controller
 
         Log::info('User logged in: ' . $user->email);
 
+        session([
+            "userData" => $user
+        ]);
         switch ($user->role_id) {
             case 1:
-                return redirect("/HSP/home");
+                return redirect("/kaprodi");
                 break;
             case 2:
-                return redirect("/lecture/home");
+                return redirect("/dosen");
                 break;
             case 3:
-                return redirect("/college/home");
+                return redirect("/mahasiswa",);
                 break;
             default:
-                return redirect("/college/home");
+                return redirect("/");
 
                 break;
         }

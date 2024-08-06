@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DosenController;
 use App\Http\Controllers\login_controller;
 use Illuminate\Support\Facades\Route;
 
@@ -19,9 +20,7 @@ Route::get('/', [AuthController::class, 'login']);
 Route::post('/actionLogin', [AuthController::class, 'actionLogin'])->name("actionLogin");
 
 
-Route::get('/dosen', function () {
-    return view('dosen.index');
-});
+Route::get('/dosen', [DosenController::class, 'dosenView']);
 
 Route::get('/dosen/mahasiswa', function () {
     return view('dosen.mahasiswa');

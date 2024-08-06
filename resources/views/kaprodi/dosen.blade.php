@@ -2,14 +2,14 @@
 
 @section('contents')
 
-@include('layouts.sidebar-kaprodi')
+@include('layouts.sidebar-kaprodi', ['userData' => $userData])
 
 <div class="w-full overflow-x-hidden border-t flex flex-col">
             <main class="w-full flex-grow p-6">
                 <div class="grid grid-cols-2 gap-2 items-center pb-2">
                     <h1 class="text-3xl text-black">Data Dosen</h1>
                     <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-40 justify-self-end">
-                      <a href="add-dosen.html">Tambah Dosen</a>
+                      <a href="{{route('/kaprodi/dosen)}}">Tambah Dosen</a>
                     </button>
                 </div>
                 
@@ -29,8 +29,9 @@
                               </tr>
                             </thead>
                             <tbody class="text-gray-700">
+                              
                               <tr>
-                                <td class="text-left py-3 px-4">1</td>
+                                <td class="text-left py-3 px-4">{{ $userData->name}}</td>
                                 <td class="text-left py-3 px-4">235345</td>
                                 <td class="text-left py-3 px-4">Smith</td>
                                 <td class="text-left py-3 px-4">#KDS2</td>
