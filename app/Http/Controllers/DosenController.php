@@ -30,6 +30,18 @@ class DosenController extends Controller
         return view('kaprodi.index',  $dataUser);
     }
 
+    public function showMahasiswaByKelas($kelasId)
+    {
+        // Validasi ID kelas
+        $kelas = Kelas::findOrFail($kelasId);
+
+        // Ambil mahasiswa berdasarkan ID kelas
+        $mahasiswaList = Mahasiswa::where('kelas_id', $kelasId)->get();
+
+        // Kembalikan view dengan data mahasiswa
+        return view('dosen.mahasiswa', compact('kelas', 'mahasiswaList'));
+    }
+
     public function dosenView(): View
     {
         $dataUser = session("userData");

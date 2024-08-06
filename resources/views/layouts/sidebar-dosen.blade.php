@@ -27,7 +27,7 @@
 
         <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
             <div class="flex items-center mr-4">
-                <p class="relative">Hai, {{$data}}!</p>
+                <p class="relative">Hai, ppp!</p>
             </div>
             <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
                 <img src="https://cdn.vectorstock.com/i/500p/53/42/user-member-avatar-face-profile-icon-vector-22965342.jpg">

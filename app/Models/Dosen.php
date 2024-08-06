@@ -9,7 +9,7 @@ class Dosen extends Model
 {
     use HasFactory;
 
-    protected $table = "dosen";
+    protected $table = "dosens";
     protected $primaryKey = "id";
     protected $typeKey = "int";
     public $timestamps = true;
