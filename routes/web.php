@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\login_controller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('login');
 });
-
 
 Route::get('/dosen', function () {
     return view('dosen.index');
