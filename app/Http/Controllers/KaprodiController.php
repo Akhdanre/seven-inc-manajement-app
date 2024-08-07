@@ -68,15 +68,37 @@ class KaprodiController extends Controller
 
     public function storeDosen(Request $request)
     {
-        // Validasi data input
+       // Validasi data input
         $request->validate([
             'nip' => 'required|numeric',
             'nama' => 'required|string|max:255',
-            'kodedosen' => 'required|numeric',
+            'kodedosen' => 'required|numeric|unique:dosens,kode_dosen',
             'kelas_id' => 'required|numeric',
             'username' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'password' => 'nullable|string|min:8',
+            'email' => 'required|string|email|unique:users,email|max:255',
+            'password' => 'required|string|min:8',
+        ], [
+            'nip.required' => 'NIP harus diisi.',
+            'nip.numeric' => 'NIP harus berupa angka.',
+            'nama.required' => 'Nama harus diisi.',
+            'nama.string' => 'Nama harus berupa teks.',
+            'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'kodedosen.required' => 'Kode Dosen harus diisi.',
+            'kodedosen.numeric' => 'Kode Dosen harus berupa angka.',
+            'kodedosen.unique' => 'Kode Dosen sudah terdaftar.',
+            'kelas_id.required' => 'ID Kelas harus diisi.',
+            'kelas_id.numeric' => 'ID Kelas harus berupa angka.',
+            'username.required' => 'Username harus diisi.',
+            'username.string' => 'Username harus berupa teks.',
+            'username.max' => 'Username tidak boleh lebih dari 255 karakter.',
+            'email.required' => 'Email harus diisi.',
+            'email.string' => 'Email harus berupa teks.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            'password.required' => 'Password harus diisi.',
+            'password.string' => 'Password harus berupa teks.',
+            'password.min' => 'Password harus minimal 8 karakter.',
         ]);
 
         // Simpan data pengguna ke tabel users
@@ -196,13 +218,19 @@ class KaprodiController extends Controller
         return view('kaprodi.add-kelas');
     }
 
-
     public function storeKelas(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'jumlahmaxmahasiswa' => 'required',
-        ]);
+    // Validasi data input
+    $request->validate([
+        'nama' => 'required|string|max:255', 
+        'jumlahmaxmahasiswa' => 'required|numeric', 
+    ], [
+        'nama.required' => 'Nama harus diisi.',
+        'nama.string' => 'Nama harus berupa teks.',
+        'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+        'jumlahmaxmahasiswa.required' => 'Jumlah maksimal mahasiswa harus diisi.',
+        'jumlahmaxmahasiswa.numeric' => 'Jumlah maksimal mahasiswa harus berupa angka.',
+    ]);
         
         error_log(" cek data kapasitas {$request->jumlahmaxmahasiswa} ");
 
@@ -222,9 +250,16 @@ class KaprodiController extends Controller
 
     public function updateKelas(Request $request, $id)
     {
+       // Validasi data input
         $request->validate([
-            'nama' => 'required|string|max:255',
-            'jumlahmaxmahasiswa' => 'required|numeric',
+            'nama' => 'required|string|max:255', 
+            'jumlahmaxmahasiswa' => 'required|numeric', 
+        ], [
+            'nama.required' => 'Nama harus diisi.',
+            'nama.string' => 'Nama harus berupa teks.',
+            'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'jumlahmaxmahasiswa.required' => 'Jumlah maksimal mahasiswa harus diisi.',
+            'jumlahmaxmahasiswa.numeric' => 'Jumlah maksimal mahasiswa harus berupa angka.',
         ]);
 
         $kelas = Kelas::findOrFail($id);
