@@ -3,15 +3,15 @@
             <a href="{{route('kaprodi.home')}}" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">E-Data</a>
         </div>
         <nav class="text-white text-base font-semibold pt-3">
-            <a href="{{route('kaprodi.home')}}" class="flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+            <a href="{{route('kaprodi.home')}}" class="{{ Request::is('*home') ? 'active-nav-link' : '' }} flex items-center text-white py-4 pl-6 nav-item">
                 <i class="fas fa-tachometer-alt mr-3"></i>
                 Dashboard
             </a>
-            <a href="{{route('kaprodi.data.dosen')}}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+            <a href="{{route('kaprodi.data.dosen')}}" class="{{ Request::is('*dosen') ? 'active-nav-link' : '' }} flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-sticky-note mr-3"></i>
                 Data Dosen
             </a>
-            <a href="{{route('kaprodi.data.kelas')}}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+            <a href="{{route('kaprodi.data.kelas')}}" class="{{ Request::is('*kelas') ? 'active-nav-link' : '' }} flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fas fa-table mr-3"></i>
                 Data Kelas
             </a>
