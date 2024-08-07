@@ -24,8 +24,8 @@ Route::post('/logout', [AuthController::class, 'actionlogout'])->name('actionLog
 
 // Group for Dosen
 Route::prefix('dosen')->middleware('role:2')->group(function () {
-    Route::get('/', [DosenController::class, 'dosenView']);
-
+    Route::get('/home', [DosenController::class, 'dosenView'])->name("dosen.home");
+    Route::get('/data/mahasiswa', [DosenController::class, 'dosenDataMahasiswa'])->name("dosen.data.mahasiswa");
 });
 
 // Group for Kaprodi
@@ -33,7 +33,7 @@ Route::prefix('kaprodi')->middleware('role:1')->group(function () {
     Route::get('/home', [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
     Route::get('/data/dosen', [KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
     Route::get('/data/kelas', [KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");
-    Route::get("/kaprodi/data/dosen",[KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
+    Route::get("/kaprodi/data/dosen", [KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
     Route::get("/kaprodi/data/add-dosen", [KaprodiController::class, 'kaprodiAddDosen'])->name("kaprodi.add.dosen");
     Route::post("/kaprodi/store-dosen", [KaprodiController::class, 'storeDosen'])->name("kaprodi.store.dosen");
     Route::get('/kaprodi/data/edit-dosen/{id}', [KaprodiController::class, 'editDosen'])->name('kaprodi.edit.dosen');
@@ -46,6 +46,3 @@ Route::prefix('mahasiswa')->middleware('role:3')->group(function () {
     Route::get('/home', [MahasiswaController::class, 'mahasiswaView']);
     Route::post('/action/update/data/request', [MahasiswaController::class, 'actionRequestUpdateData'])->name("actionRequestUpdateData");
 });
-
-
-
