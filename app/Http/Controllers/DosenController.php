@@ -45,7 +45,7 @@ class DosenController extends Controller
         $user = Auth::user();
         $dataDosen = Dosen::where("user_id", $user->id)->first();
         $data = [];
-        if ($dataDosen->kelas_id != null) {
+        if (isset($dataDosen->kelas_id)) {
             $data = Mahasiswa::where("kelas_id", $dataDosen->kelas_id)->get();
         }
 
@@ -53,5 +53,17 @@ class DosenController extends Controller
             "user" => $user,
             "listMahasiswa" => $data
         ]);
+    }
+
+    public function addDataMahasiswa()
+    {
+        return View("add-mahasiswa");
+    }
+    public function editDataMahasiswa()
+    {
+        return View("edit-mahasiswa");
+    }
+    public function deleteDataMahasiswa()
+    {
     }
 }
