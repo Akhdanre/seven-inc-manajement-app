@@ -57,11 +57,11 @@
                   <i class="fas fa-edit"></i>
                 </a>
                 <form action="{{ route('kaprodi.delete-dosen', $dosen->id) }}" method="POST" class="inline">
-                  @csrf
-                  @method('DELETE')
-                  <button type="submit" class="text-red-500 hover:text-red-700 ml-2">
-                    <i class="fas fa-trash"></i>
-                  </button>
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" onclick="confirmDelete(this)" class="text-red-500 hover:text-red-700 ml-2">
+                        <i class="fas fa-trash"></i>
+                    </button>
                 </form>
               </td>
             </tr>
@@ -70,6 +70,29 @@
         </table>
       </div>
     </div>
+
+      <script>
+      function confirmDelete(button) {
+          // Find the form element
+          const form = button.closest('form');
+          
+          Swal.fire({
+              title: 'Konfirmasi Hapus',
+              text: "Apakah Anda yakin ingin menghapus dosen ini?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Hapus',
+              cancelButtonText: 'Batal'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // Submit the form if confirmed
+                  form.submit();
+              }
+          });
+      }
+  </script>
 
   </main>
 

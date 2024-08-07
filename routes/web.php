@@ -33,12 +33,17 @@ Route::prefix('kaprodi')->middleware('role:1')->group(function () {
     Route::get('/home', [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
     Route::get('/data/dosen', [KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
     Route::get('/data/kelas', [KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");
-    Route::get("/kaprodi/data/dosen",[KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
-    Route::get("/kaprodi/data/add-dosen", [KaprodiController::class, 'kaprodiAddDosen'])->name("kaprodi.add.dosen");
-    Route::post("/kaprodi/store-dosen", [KaprodiController::class, 'storeDosen'])->name("kaprodi.store.dosen");
-    Route::get('/kaprodi/data/edit-dosen/{id}', [KaprodiController::class, 'editDosen'])->name('kaprodi.edit.dosen');
-    Route::put('/kaprodi/update-dosen/{id}', [KaprodiController::class, 'updateDosen'])->name('kaprodi.update-dosen');
-    Route::delete('/kaprodi/delete-dosen/{id}', [KaprodiController::class, 'deleteDosen'])->name('kaprodi.delete-dosen');
+    Route::get("/data/dosen",[KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
+    Route::get("/data/add-dosen", [KaprodiController::class, 'kaprodiAddDosen'])->name("kaprodi.add.dosen");
+    Route::post("/store-dosen", [KaprodiController::class, 'storeDosen'])->name("kaprodi.store.dosen");
+    Route::get('/data/edit-dosen/{id}', [KaprodiController::class, 'editDosen'])->name('kaprodi.edit.dosen');
+    Route::put('/update-dosen/{id}', [KaprodiController::class, 'updateDosen'])->name('kaprodi.update-dosen');
+    Route::delete('/delete-dosen/{id}', [KaprodiController::class, 'deleteDosen'])->name('kaprodi.delete-dosen');
+    Route::get("/data/add-kelas", [KaprodiController::class, 'kaprodiAddKelas'])->name("kaprodi.add.kelas");
+    Route::post("/store-kelas", [KaprodiController::class, 'storeKelas'])->name("kaprodi.store.kelas");
+    Route::get('/data/edit-kelas/{id}', [KaprodiController::class, 'editKelas'])->name('kaprodi.edit.kelas');
+    Route::put('/update-kelas/{id}', [KaprodiController::class, 'updateKelas'])->name('kaprodi.update-kelas');
+    Route::delete('/delete-kelas/{id}', [KaprodiController::class, 'deleteKelas'])->name('kaprodi.delete-kelas');
 });
 
 // Group for Mahasiswa

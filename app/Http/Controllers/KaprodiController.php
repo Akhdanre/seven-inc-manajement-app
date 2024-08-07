@@ -186,7 +186,61 @@ class KaprodiController extends Controller
     {
         $user = Auth::user();
 
-        $allDataKelas = Kelas::all();
+        $allDataKelas = Kelas::where('id', '!=', 0)->get();
         return view('kaprodi.kelas')->with(["username" => $user->username, "data" => $allDataKelas]);
+    }
+
+    
+    public function kaprodiAddKelas()
+    {
+        return view('kaprodi.add-kelas');
+    }
+
+
+    public function storeKelas(Request $request)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'jumlahmaxmahasiswa' => 'required',
+        ]);
+        
+        error_log(" cek data kapasitas {$request->jumlahmaxmahasiswa} ");
+
+        Kelas::create([
+            'name' => $request->nama,
+            'kapasitas' => $request->jumlahmaxmahasiswa,
+        ]);
+        return redirect()->route('kaprodi.data.kelas')->with('success', 'Kelas berhasil ditambahkan');
+    }
+
+    public function editKelas($id)
+    {
+        $kelas = Kelas::findOrFail($id);
+
+        return view('kaprodi.edit-kelas', compact('kelas'));
+    }
+
+    public function updateKelas(Request $request, $id)
+    {
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'jumlahmaxmahasiswa' => 'required|numeric',
+        ]);
+
+        $kelas = Kelas::findOrFail($id);
+
+        $kelas->update([
+            'name' => $request->nama,
+            'kapasitas' => $request->jumlahmaxmahasiswa,
+        ]);
+
+        return redirect()->route('kaprodi.edit.kelas', $id)->with('success', 'Kelas berhasil diperbarui!');
+    }
+
+    public function deleteKelas($id) {
+        $kelas = Kelas::findOrFail($id);
+        $kelas->delete();
+    
+        return redirect()->route('kaprodi.data.kelas')->with('success', 'Kelas berhasil dihapus!');
     }
 }

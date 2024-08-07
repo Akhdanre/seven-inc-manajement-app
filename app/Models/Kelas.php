@@ -18,7 +18,7 @@ class Kelas extends Model
 
     protected $fillable =  [
         "name",
-        "jumlah"
+        "kapasitas"
     ];
 
     public function dosen(): HasOne
