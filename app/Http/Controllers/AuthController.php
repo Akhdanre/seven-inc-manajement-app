@@ -3,13 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
-use App\Http\Resources\UserResource;
-use App\Models\Users;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
@@ -22,34 +17,22 @@ class AuthController extends Controller
 
     public function actionLogin(LoginRequest $request)
     {
-        Log::info("Login attempt started");
+        $credentials = $request->validated();
 
-        $data = $request->validated();
-        $user = Users::where("email", $data['email'])->first();
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
 
-        if (!$user || !Hash::check($data['password'], $user->password)) {
-            Log::warning('Invalid credentials for email: ' . $data['email']);
+            $redirectPath = match ($user->role_id) {
+                1 => '/kaprodi/home',
+                2 => '/dosen/home',
+                3 => '/mahasiswa/home',
+                default => '/'
+            };
+
+            return redirect($redirectPath);
+        } else {
+            Log::warning('Invalid credentials for email: ' . $credentials['email']);
             return redirect()->back()->withErrors(['email' => 'Email or password is incorrect.']);
-        }
-
-        Log::info('User logged in: ' . $user->email);
-
-        session([
-            "userData" => $user
-        ]);
-        switch ($user->role_id) {
-            case 1:
-                return redirect("/kaprodi/home");
-                break;
-            case 2:
-                return redirect("/dosen/home");
-                break;
-            case 3:
-                return redirect("/mahasiswa/home");
-                break;
-            default:
-                return redirect("/");
-                break;
         }
     }
 }

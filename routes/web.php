@@ -20,14 +20,22 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login']);
 Route::post('/actionLogin', [AuthController::class, 'actionLogin'])->name("actionLogin");
+Route::post('/logout', [AuthController::class, 'actionlogout'])->name('actionLogout');
 
+// Group for Dosen
+Route::prefix('dosen')->middleware('role:2')->group(function () {
+    Route::get('/', [DosenController::class, 'dosenView']);
+});
 
-Route::get('/dosen', [DosenController::class, 'dosenView']);
+// Group for Kaprodi
+Route::prefix('kaprodi')->middleware('role:1')->group(function () {
+    Route::get('/home', [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
+    Route::get('/data/dosen', [KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
+    Route::get('/data/kelas', [KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");
+});
 
-
-Route::get("/kaprodi/home", [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
-Route::get("/kaprodi/data/dosen", [KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
-Route::get("/kaprodi/data/kelas", [KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");
-
-Route::get("/mahasiswa/home", [MahasiswaController::class, 'mahasiswaView']);
-Route::post("/action/update/data/request", [MahasiswaController::class, 'actionRequestUpdateData'])->name("actionRequestUpdateData");
+// Group for Mahasiswa
+Route::prefix('mahasiswa')->middleware('role:3')->group(function () {
+    Route::get('/home', [MahasiswaController::class, 'mahasiswaView']);
+    Route::post('/action/update/data/request', [MahasiswaController::class, 'actionRequestUpdateData'])->name("actionRequestUpdateData");
+});

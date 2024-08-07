@@ -38,7 +38,7 @@
         <div class="mb-4">
           <p class="font-bold">Tempat Tanggal Lahir:</p>
           <p class="text-gray-700">
-            {{ $data['birth_place'] ?? "" }}, {{ \Carbon\Carbon::parse($data['birth_date'])->format('d-m-Y') }}
+            {{ $data['birth_place'] ?? "" }},{{ isset($data['birth_date']) ? \Carbon\Carbon::parse($data['birth_date'])->format('d-m-Y') : "" }}
           </p>
         </div>
         <div class="mb-4">
@@ -68,8 +68,8 @@
     <form action="/action/update/data/request" method="POST">
       @csrf
       <div class="mb-4">
-        <input type="hidden" name="mahasiswa_id" value="{{ $data['id']}}">
-        <input type="hidden" name="kelas_id" value="{{ $data->kelas->id }}">
+        <input type="hidden" name="mahasiswa_id" value="{{ $data->id ?? ''}}">
+        <input type="hidden" name="kelas_id" value="{{ $data->kelas->id ?? ''}}">
         <label class="block font-bold mb-2" for="keterangan">Keterangan</label>
         <textarea class="border border-gray-300 p-2 w-full h-40 resize-none" id="keterangan" name="keterangan"></textarea>
       </div>
