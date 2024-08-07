@@ -9,7 +9,7 @@ class Dosen extends Model
 {
     use HasFactory;
 
-    protected $table = "dosen";
+    protected $table = "dosens";
     protected $primaryKey = "id";
     protected $typeKey = "int";
     public $timestamps = true;
@@ -24,4 +24,9 @@ class Dosen extends Model
         "name",
         "role_id"
     ];
+
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'id');
+    }
 }

@@ -24,5 +24,6 @@ class Kelas extends Model
     public function dosen(): HasOne
     {
         return $this->hasOne(Dosen::class, 'id', 'kelas_id');
+
     }
 }

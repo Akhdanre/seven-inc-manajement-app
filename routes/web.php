@@ -25,6 +25,7 @@ Route::post('/logout', [AuthController::class, 'actionlogout'])->name('actionLog
 // Group for Dosen
 Route::prefix('dosen')->middleware('role:2')->group(function () {
     Route::get('/', [DosenController::class, 'dosenView']);
+
 });
 
 // Group for Kaprodi
@@ -39,3 +40,4 @@ Route::prefix('mahasiswa')->middleware('role:3')->group(function () {
     Route::get('/home', [MahasiswaController::class, 'mahasiswaView']);
     Route::post('/action/update/data/request', [MahasiswaController::class, 'actionRequestUpdateData'])->name("actionRequestUpdateData");
 });
+
