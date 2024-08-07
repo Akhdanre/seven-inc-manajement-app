@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Dosen;
 use App\Models\Kelas;
 use App\Models\Mahasiswa;
+use Illuminate\Contracts\View\View;
 
 class DosenController extends Controller
 {
@@ -19,7 +20,7 @@ class DosenController extends Controller
         // Hitung total Kaprodi (role_id 1) dan Dosen (role_id 2)
         $totalKaprodi = Dosen::where('role_id', 1)->count();
         $totalDosen = Dosen::where('role_id', 2)->count();
-        
+
         // Hitung total Kelas dan Mahasiswa
         $totalKelas = Kelas::count();
         $totalMahasiswa = Mahasiswa::count();
@@ -46,7 +47,7 @@ class DosenController extends Controller
     {
         $dataUser = session("userData");
         $username = "ouken";
-        if($dataUser != null){
+        if ($dataUser != null) {
             $username = $dataUser->username;
         }
         return view('dosen.index')->with(['data' => $username]);

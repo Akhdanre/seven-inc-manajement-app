@@ -6,9 +6,9 @@ use App\Models\Kelas;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\Dosen;
-use App\Models\Kelas;
 use App\Models\Users;
 use App\Models\Mahasiswa;
+use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class KaprodiController extends Controller
@@ -21,16 +21,16 @@ class KaprodiController extends Controller
             $username = $session->username;
         }
 
-         // Hitung total Kaprodi (role_id 1) dan Dosen (role_id 2)
+        // Hitung total Kaprodi (role_id 1) dan Dosen (role_id 2)
         $totalKaprodi = Dosen::where('role_id', 1)->count();
         $totalDosen = Dosen::where('role_id', 2)->count();
-        
+
         // Hitung total Kelas dan Mahasiswa
         $totalKelas = Kelas::where('id', '!=', 0)->count();
         $totalMahasiswa = Mahasiswa::count();
 
         $dataUser = session("userData");
-        
+
         return view('kaprodi.index', [
             'totalKaprodi' => $totalKaprodi,
             'totalDosen' => $totalDosen,
@@ -88,15 +88,15 @@ class KaprodiController extends Controller
         ]);
 
         // Simpan data pengguna ke tabel users
-        $user = Users::create([
+        $user = User::create([
             'email' => $request->input('email'),
-            'username' => $request->input('username'), 
+            'username' => $request->input('username'),
             'password' => Hash::make($request->input('password')),
             'role_id' => 2,
         ]);
 
         // Simpan data dosen ke tabel dosen
-         Dosen::create([
+        Dosen::create([
             'user_id' => $user->id,
             'kelas_id' => $request->input('kelas_id'),
             'kode_dosen' => $request->input('kodedosen'),
@@ -114,21 +114,21 @@ class KaprodiController extends Controller
     {
         // Mengambil data dosen berdasarkan ID
         $dosen = Dosen::findOrFail($id);
-    
+
         // Mengambil data kelas berdasarkan kelas_id dari dosen yang bersangkutan
         $kelas = Kelas::find($dosen->kelas_id);
 
-         // Mengambil data user berdasarkan user_id dari dosen yang bersangkutan
-        $user = Users::where('id', $dosen->user_id)->first();
-        
+        // Mengambil data user berdasarkan user_id dari dosen yang bersangkutan
+        $user = User::where('id', $dosen->user_id)->first();
+
         // Menambahkan nama kelas ke objek dosen
         $dosen->kelas_name = $kelas ? $kelas->nama_kelas : 'N/A';
-        
+
         // Mengambil semua data kelas untuk dropdown
         $kelasList = Kelas::all();
-        
+
         // Mengirim data dosen dan daftar kelas ke view 'kaprodi.edit-dosen'
-        return view('kaprodi.edit-dosen', compact('dosen', 'kelasList','user'));
+        return view('kaprodi.edit-dosen', compact('dosen', 'kelasList', 'user'));
     }
 
     public function updateDosen(Request $request, $id)
@@ -148,7 +148,7 @@ class KaprodiController extends Controller
         $dosen = Dosen::findOrFail($id);
 
         // Mengambil data user yang terkait dengan dosen
-        $user = Users::findOrFail($dosen->user_id);
+        $user = User::findOrFail($dosen->user_id);
 
         // Update data dosen
         $dosen->update([
@@ -201,5 +201,4 @@ class KaprodiController extends Controller
         $allDataKelas = Kelas::all();
         return view('kaprodi.kelas')->with(["username" => $username, "data" => $allDataKelas]);
     }
-
 }
