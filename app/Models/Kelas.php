@@ -19,4 +19,9 @@ class Kelas extends Model
         "name",
         "jumlah"
     ];
+
+    public function dosens()
+    {
+        return $this->belongsTo(Dosen::class, 'kelas_id');
+    }
 }

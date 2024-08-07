@@ -24,4 +24,9 @@ class Dosen extends Model
         "name",
         "role_id"
     ];
+
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'id');
+    }
 }

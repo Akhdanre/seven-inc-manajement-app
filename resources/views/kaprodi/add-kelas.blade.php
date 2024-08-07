@@ -9,9 +9,9 @@
             <main class="w-full flex-grow p-6">
                 <div class="grid grid-cols-2 gap-2 items-center pb-2">
                     <h1 class="text-3xl text-black">Tambahkan Kelas</h1>
-                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-40 justify-self-end">
-                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                         Kembali
+                   <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-40 justify-self-end">
+                  <a href="/data/dosen"><i class="fa fa-arrow-left" aria-hidden="true"></i>
+                         Kembali</a>
                     </button>
                 </div>
                 

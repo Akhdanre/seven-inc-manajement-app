@@ -51,9 +51,9 @@ Route::get('/kaprodi/add-kelas', function () {
     return view('kaprodi.add-kelas');
 });
 
-Route::get('/kaprodi/add-dosen', function () {
-    return view('kaprodi.add-dosen');
-});
+// Route::get('/kaprodi/add-dosen', function () {
+//     return view('kaprodi.add-dosen');
+// });
 
 Route::get('/mahasiswa', function () {
     return view('mahasiswa.index');
@@ -63,5 +63,11 @@ Route::get('/dosen', [DosenController::class, 'dosenView']);
 
 
 Route::get("/kaprodi/home", [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
+
 Route::get("/kaprodi/data/dosen",[KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
+Route::get("/kaprodi/data/add-dosen", [KaprodiController::class, 'kaprodiAddDosen'])->name("kaprodi.add.dosen");
+Route::post("/kaprodi/store-dosen", [KaprodiController::class, 'storeDosen'])->name("kaprodi.store.dosen");
+Route::get('/kaprodi/data/edit-dosen/{id}', [KaprodiController::class, 'editDosen'])->name('kaprodi.edit.dosen');
+Route::put('/kaprodi/update-dosen/{id}', [KaprodiController::class, 'updateDosen'])->name('kaprodi.update-dosen');
+
 Route::get("/kaprodi/data/kelas",[KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");
