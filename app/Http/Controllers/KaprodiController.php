@@ -10,17 +10,14 @@ use App\Models\Users;
 use App\Models\Mahasiswa;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class KaprodiController extends Controller
 {
     public function kaprodiView(): View
     {
-        $username = "oukenze";
-        $session = session("userData");
-        if ($session != null) {
-            $username = $session->username;
-        }
-
+        $user = Auth::user();
+      
         // Hitung total Kaprodi (role_id 1) dan Dosen (role_id 2)
         $totalKaprodi = Dosen::where('role_id', 1)->count();
         $totalDosen = Dosen::where('role_id', 2)->count();
@@ -36,18 +33,13 @@ class KaprodiController extends Controller
             'totalDosen' => $totalDosen,
             'totalKelas' => $totalKelas,
             'totalMahasiswa' => $totalMahasiswa,
-            'username' => $username,
+            'username' => $user->username ,
         ]);
     }
 
     public function kaprodiDataDosenView(): View
     {
-        $username = "oukenze";
-        $session = session("userData");
-        if ($session != null) {
-            $username = $session->username;
-        }
-
+        $user = Auth::user();
 
         // Ambil semua data dosen
         $dosenList = Dosen::all();
@@ -60,7 +52,7 @@ class KaprodiController extends Controller
 
         // Kembalikan view dengan data dosen dan username
         return view('kaprodi.dosen')->with([
-            'data' => $username,
+            'data' => $user,
             'dosenList' => $dosenList,
         ]);
     }
@@ -180,7 +172,7 @@ class KaprodiController extends Controller
         $dosen = Dosen::findOrFail($id);
 
         // Find the related User
-        $user = Users::findOrFail($dosen->user_id);
+        $user = User::findOrFail($dosen->user_id);
 
         // Delete the Dosen and User
         $dosen->delete();
@@ -192,13 +184,9 @@ class KaprodiController extends Controller
 
     public function kaprodiDataKelasView(): View
     {
-        $username = "oukenze";
-        $session = session("userData");
-        if ($session != null) {
-            $username = $session->username;
-        }
+        $user = Auth::user();
 
         $allDataKelas = Kelas::all();
-        return view('kaprodi.kelas')->with(["username" => $username, "data" => $allDataKelas]);
+        return view('kaprodi.kelas')->with(["username" => $user->username, "data" => $allDataKelas]);
     }
 }
