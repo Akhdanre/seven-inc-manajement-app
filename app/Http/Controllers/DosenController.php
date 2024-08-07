@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Dosen;
 use App\Models\Kelas;
 use App\Models\Mahasiswa;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
+
+use function Laravel\Prompts\error;
 
 class DosenController extends Controller
 {
@@ -15,41 +17,56 @@ class DosenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        // Hitung total Kaprodi (role_id 1) dan Dosen (role_id 2)
-        $totalKaprodi = Dosen::where('role_id', 1)->count();
-        $totalDosen = Dosen::where('role_id', 2)->count();
-
-        // Hitung total Kelas dan Mahasiswa
-        $totalKelas = Kelas::count();
-        $totalMahasiswa = Mahasiswa::count();
-
-        // Kembalikan view dengan data total
-        return view('dosen.index', compact('totalKaprodi', 'totalDosen', 'totalKelas', 'totalMahasiswa'));
-        $dataUser = session("userData");
-        return view('kaprodi.index',  $dataUser);
-    }
-
-    public function showMahasiswaByKelas($kelasId)
-    {
-        // Validasi ID kelas
-        $kelas = Kelas::findOrFail($kelasId);
-
-        // Ambil mahasiswa berdasarkan ID kelas
-        $mahasiswaList = Mahasiswa::where('kelas_id', $kelasId)->get();
-
-        // Kembalikan view dengan data mahasiswa
-        return view('dosen.mahasiswa', compact('kelas', 'mahasiswaList'));
-    }
 
     public function dosenView(): View
     {
-        $dataUser = session("userData");
-        $username = "ouken";
-        if ($dataUser != null) {
-            $username = $dataUser->username;
+
+        $dosen = Auth::user();
+
+        $totalKaprodi = Dosen::where('role_id', 1)->count();
+        $totalDosen = Dosen::where('role_id', 2)->count();
+
+        $totalKelas = Kelas::count();
+        $totalMahasiswa = Mahasiswa::count();
+
+        return view('dosen.index')->with([
+            "user" => $dosen,
+            "totalKaprodi" => $totalKaprodi,
+            "totalDosen" => $totalDosen,
+            "totalKelas" => $totalKelas,
+            "totalMahasiswa" => $totalMahasiswa
+        ]);
+    }
+
+
+    public function dosenDataMahasiswa()
+    {
+
+        $user = Auth::user();
+        $dataDosen = Dosen::where("user_id", $user->id)->first();
+        $data = [];
+        error_log(json_encode($dataDosen));
+        if ($dataDosen->kelas_id != null) {
+            error_log("disini");
+            $data = Mahasiswa::where("kelas_id", $dataDosen->kelas_id)->get();
         }
-        return view('dosen.index')->with(['data' => $username]);
+
+        error_log("data " . json_encode($data));
+
+
+        return view('dosen.mahasiswa')->with([
+            "user" => $user,
+            "listMahasiswa" => $data
+        ]);
+    }
+
+    public function dosenDataRequestUpdate()
+    {
+        $user = Auth::user();
+        
+
+        return View("dosen.request-update")->with([
+            "user" => $user
+        ]);
     }
 }
