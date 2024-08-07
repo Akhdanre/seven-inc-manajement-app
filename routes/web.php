@@ -69,5 +69,6 @@ Route::get("/kaprodi/data/add-dosen", [KaprodiController::class, 'kaprodiAddDose
 Route::post("/kaprodi/store-dosen", [KaprodiController::class, 'storeDosen'])->name("kaprodi.store.dosen");
 Route::get('/kaprodi/data/edit-dosen/{id}', [KaprodiController::class, 'editDosen'])->name('kaprodi.edit.dosen');
 Route::put('/kaprodi/update-dosen/{id}', [KaprodiController::class, 'updateDosen'])->name('kaprodi.update-dosen');
+Route::delete('/kaprodi/delete-dosen/{id}', [KaprodiController::class, 'deleteDosen'])->name('kaprodi.delete-dosen');
 
 Route::get("/kaprodi/data/kelas",[KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");

@@ -56,7 +56,7 @@
                           <a href="{{ route('kaprodi.edit.dosen', $dosen->id) }}" class="text-blue-500 hover:text-blue-700">
                               <i class="fas fa-edit"></i>
                           </a>
-                          <form action="" method="POST" class="inline">
+                          <form action="{{ route('kaprodi.delete-dosen', $dosen->id) }}" method="POST" class="inline">
                               @csrf
                               @method('DELETE')
                               <button type="submit" class="text-red-500 hover:text-red-700 ml-2">

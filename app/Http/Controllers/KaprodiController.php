@@ -25,7 +25,7 @@ class KaprodiController extends Controller
         $totalDosen = Dosen::where('role_id', 2)->count();
         
         // Hitung total Kelas dan Mahasiswa
-        $totalKelas = Kelas::count();
+        $totalKelas = Kelas::where('id', '!=', 0)->count();
         $totalMahasiswa = Mahasiswa::count();
 
         $dataUser = session("userData");
@@ -169,6 +169,22 @@ class KaprodiController extends Controller
         $user->update($userData);
 
         return redirect()->back()->with('success', 'Data dosen berhasil diupdate!');
+    }
+
+    public function deleteDosen($id)
+    {
+        // Find the Dosen by ID
+        $dosen = Dosen::findOrFail($id);
+
+        // Find the related User
+        $user = Users::findOrFail($dosen->user_id);
+
+        // Delete the Dosen and User
+        $dosen->delete();
+        $user->delete();
+
+        // Redirect back with success message
+        return redirect()->back()->with('success', 'Data dosen berhasil dihapus!');
     }
 
     public function kaprodiDataKelasView(): View
