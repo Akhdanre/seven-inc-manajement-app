@@ -17,7 +17,7 @@ class KaprodiController extends Controller
     public function kaprodiView(): View
     {
         $user = Auth::user();
-      
+
         // Hitung total Kaprodi (role_id 1) dan Dosen (role_id 2)
         $totalKaprodi = Dosen::where('role_id', 1)->count();
         $totalDosen = Dosen::where('role_id', 2)->count();
@@ -33,7 +33,7 @@ class KaprodiController extends Controller
             'totalDosen' => $totalDosen,
             'totalKelas' => $totalKelas,
             'totalMahasiswa' => $totalMahasiswa,
-            'username' => $user->username ,
+            'username' => $user->username,
         ]);
     }
 
@@ -52,7 +52,7 @@ class KaprodiController extends Controller
 
         // Kembalikan view dengan data dosen dan username
         return view('kaprodi.dosen')->with([
-            'data' => $user,
+            'user' => $user,
             'dosenList' => $dosenList,
         ]);
     }
