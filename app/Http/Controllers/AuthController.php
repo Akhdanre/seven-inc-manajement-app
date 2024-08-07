@@ -42,10 +42,10 @@ class AuthController extends Controller
                 return redirect("/kaprodi/home");
                 break;
             case 2:
-                return redirect("/dosen");
+                return redirect("/dosen/home");
                 break;
             case 3:
-                return redirect("/mahasiswa");
+                return redirect("/mahasiswa/home");
                 break;
             default:
                 return redirect("/");

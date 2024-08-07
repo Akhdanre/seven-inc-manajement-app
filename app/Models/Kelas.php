@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Kelas extends Model
 {
@@ -19,4 +20,9 @@ class Kelas extends Model
         "name",
         "jumlah"
     ];
+
+    public function dosen(): HasOne
+    {
+        return $this->hasOne(Dosen::class, 'id', 'kelas_id');
+    }
 }
