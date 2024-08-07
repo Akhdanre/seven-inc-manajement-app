@@ -180,7 +180,7 @@ class KaprodiController extends Controller
         $dosen = Dosen::findOrFail($id);
 
         // Find the related User
-        $user = Users::findOrFail($dosen->user_id);
+        $user = User::findOrFail($dosen->user_id);
 
         // Delete the Dosen and User
         $dosen->delete();
