@@ -45,28 +45,13 @@ class DosenController extends Controller
         $user = Auth::user();
         $dataDosen = Dosen::where("user_id", $user->id)->first();
         $data = [];
-        error_log(json_encode($dataDosen));
         if ($dataDosen->kelas_id != null) {
-            error_log("disini");
             $data = Mahasiswa::where("kelas_id", $dataDosen->kelas_id)->get();
         }
-
-        error_log("data " . json_encode($data));
-
 
         return view('dosen.mahasiswa')->with([
             "user" => $user,
             "listMahasiswa" => $data
-        ]);
-    }
-
-    public function dosenDataRequestUpdate()
-    {
-        $user = Auth::user();
-        
-
-        return View("dosen.request-update")->with([
-            "user" => $user
         ]);
     }
 }
