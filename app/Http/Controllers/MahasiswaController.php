@@ -24,6 +24,7 @@ class MahasiswaController extends Controller
 
     public function actionRequestUpdateData(UpdateDataRequest $request)
     {
+
         $data = $request->validated();
 
         $user = Auth::user();
