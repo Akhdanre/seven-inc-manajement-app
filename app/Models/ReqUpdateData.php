@@ -18,5 +18,6 @@ class ReqUpdateData extends Model
     protected $fillable = [
         "kelas_id",
         "mahasiswa_id",
+        "keterangan"
     ];
 }

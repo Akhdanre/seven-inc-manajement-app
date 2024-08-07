@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\KaprodiController;
 use App\Http\Controllers\login_controller;
+use App\Http\Controllers\MahasiswaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,55 +20,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login']);
 Route::post('/actionLogin', [AuthController::class, 'actionLogin'])->name("actionLogin");
+Route::post('/logout', [AuthController::class, 'actionlogout'])->name('actionLogout');
 
-// Route::get('/dosen', [DosenController::class, 'dosenView']);
-Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
+// Group for Dosen
+Route::prefix('dosen')->middleware('role:2')->group(function () {
+    Route::get('/', [DosenController::class, 'dosenView']);
 
-Route::get('/dosen/mahasiswa', function () {
-    return view('dosen.mahasiswa');
 });
 
-Route::get('/dosen/add-mahasiswa', function () {
-    return view('dosen.add-mahasiswa');
+// Group for Kaprodi
+Route::prefix('kaprodi')->middleware('role:1')->group(function () {
+    Route::get('/home', [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
+    Route::get('/data/dosen', [KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
+    Route::get('/data/kelas', [KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");
 });
 
-Route::get('/dosen/edit-mahasiswa', function () {
-    return view('dosen.edit-mahasiswa');
+// Group for Mahasiswa
+Route::prefix('mahasiswa')->middleware('role:3')->group(function () {
+    Route::get('/home', [MahasiswaController::class, 'mahasiswaView']);
+    Route::post('/action/update/data/request', [MahasiswaController::class, 'actionRequestUpdateData'])->name("actionRequestUpdateData");
 });
 
-Route::get('/kaprodi', function () {
-    return view('kaprodi.index');
-});
-
-Route::get('/kaprodi/kelas', function () {
-    return view('kaprodi.kelas');
-});
-
-Route::get('/kaprodi/dosen', function () {
-    return view('kaprodi.dosen');
-});
-
-Route::get('/kaprodi/add-kelas', function () {
-    return view('kaprodi.add-kelas');
-});
-
-// Route::get('/kaprodi/add-dosen', function () {
-//     return view('kaprodi.add-dosen');
-// });
-
-Route::get('/mahasiswa', function () {
-    return view('mahasiswa.index');
-});
-
-Route::get('/dosen', [DosenController::class, 'dosenView']);
-
-
-Route::get("/kaprodi/home", [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
-
-Route::get("/kaprodi/data/dosen",[KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
-Route::get("/kaprodi/data/add-dosen", [KaprodiController::class, 'kaprodiAddDosen'])->name("kaprodi.add.dosen");
-Route::post("/kaprodi/store-dosen", [KaprodiController::class, 'storeDosen'])->name("kaprodi.store.dosen");
-Route::get('/kaprodi/data/edit-dosen/{id}', [KaprodiController::class, 'editDosen'])->name('kaprodi.edit.dosen');
-Route::put('/kaprodi/update-dosen/{id}', [KaprodiController::class, 'updateDosen'])->name('kaprodi.update-dosen');
-
-Route::get("/kaprodi/data/kelas",[KaprodiController::class, 'kaprodiDatakelasView'])->name("kaprodi.data.kelas");

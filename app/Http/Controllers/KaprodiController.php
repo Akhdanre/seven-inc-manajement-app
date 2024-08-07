@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\Dosen;
@@ -38,6 +39,7 @@ class KaprodiController extends Controller
             'username' => $username,
         ]);
     }
+
     public function kaprodiDataDosenView(): View
     {
         $username = "oukenze";
@@ -45,6 +47,7 @@ class KaprodiController extends Controller
         if ($session != null) {
             $username = $session->username;
         }
+
 
         // Ambil semua data dosen
         $dosenList = Dosen::all();
@@ -178,7 +181,9 @@ class KaprodiController extends Controller
         if ($session != null) {
             $username = $session->username;
         }
-        return view('kaprodi.kelas')->with(["data" => $username]);
+
+        $allDataKelas = Kelas::all();
+        return view('kaprodi.kelas')->with(["username" => $username, "data" => $allDataKelas]);
     }
 
 }
