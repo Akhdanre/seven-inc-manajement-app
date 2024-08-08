@@ -62,9 +62,9 @@
           <tbody class="text-gray-700">
             @foreach($listMahasiswa as $mahasiswa)
             <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-gray-200':''}}">
-              <td class=" text-left py-3 px-4">{{ $loop->iteration }}</td>
+              <td class="text-left py-3 px-4">{{ $loop->iteration }}</td>
               <td class="text-left py-3 px-4">{{ $mahasiswa->nim }}</td>
-              <td class="text-left py-3 px-4">{{ $mahasiswa->name}}</td>
+              <td class="text-left py-3 px-4">{{ $mahasiswa->name }}</td>
               <td class="text-left py-3 px-4">{{ $mahasiswa->birth_place }}, {{ $mahasiswa->birth_date }}</td>
               @if ($mahasiswa->edit_status == true)
               <td class="text-left py-3 px-4">
@@ -74,13 +74,14 @@
               <td class="text-left py-3 px-4">
                 <button class="bg-yellow-500 text-white text-sm px-2 py-1 rounded">tidak</button>
               </td>
-
               @endif
-              <td class="text-left py-3 px-4">
-                <button class="text-blue-500 hover:text-blue-700">
+              <td class="text-left py-3 px-4 flex items-center space-x-2">
+                <a href="{{ route('dosen.edit.data.mahasiswa', ['id' => $mahasiswa->id]) }}" class="text-blue-500 hover:text-blue-700">
                   <i class="fas fa-edit"></i>
-                </button>
-                <button class="text-red-500 hover:text-red-700 ml-2 flex items-center py-4 pl-6" onclick="confirmDelete('{{$mahasiswa->id }}')">
+                </a>
+
+
+                <button class="text-red-500 hover:text-red-700" onclick="confirmDelete('{{$mahasiswa->id }}')">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
@@ -88,6 +89,7 @@
             @endforeach
           </tbody>
         </table>
+
       </div>
     </div>
 
@@ -164,7 +166,7 @@
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}' 
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
           }
         }).finally(() => {
           window.location.reload();
@@ -172,5 +174,20 @@
       }
     });
   }
+
+  setTimeout(function() {
+    var successNotification = document.getElementById('success-notification');
+    if (successNotification) {
+      successNotification.style.display = 'none';
+    }
+  }, 3000);
+
+  // Menghilangkan notifikasi error setelah 3 detik
+  setTimeout(function() {
+    var errorNotification = document.getElementById('error-notification');
+    if (errorNotification) {
+      errorNotification.style.display = 'none';
+    }
+  }, 3000);
 </script>
 @endsection

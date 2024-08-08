@@ -27,10 +27,10 @@ Route::prefix('dosen')->middleware('role:2')->group(function () {
     Route::get('/home', [DosenController::class, 'dosenView'])->name("dosen.home");
     Route::get('/data/mahasiswa', [DosenController::class, 'dosenDataMahasiswa'])->name("dosen.data.mahasiswa");
     Route::get('/data/mahasiswa/add', [DosenController::class, 'addDataMahasiswaView'])->name("dosen.add.data.mahasiswa");
-    Route::get('/data/mahasiswa/edit', [DosenController::class, 'editDataMahasiswaView'])->name("dosen.edit.data.mahasiswa");
+    Route::get('/data/mahasiswa/edit/{id}', [DosenController::class, 'editDataMahasiswaView'])->name('dosen.edit.data.mahasiswa');
 
     Route::post('/action/data/mahasiswa/add', [DosenController::class, 'actionAddDataMahasiswa']);
-    Route::post('/action/data/mahasiswa/edit', [DosenController::class, 'actionEditDataMahasiswa']);
+    Route::post('/action/data/mahasiswa/edit', [DosenController::class, 'actionEditDataMahasiswa'])->name("dosen.action.edit.data.mahasiswa");
     Route::delete('/action/data/mahasiswa/delete/{id}', [DosenController::class, 'actionDeleteDataMahasiswa'])->name("dosen.delete.data.mahasiswa");
 });
 

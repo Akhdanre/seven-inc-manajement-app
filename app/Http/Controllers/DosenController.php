@@ -11,6 +11,7 @@ use App\Models\ReqUpdateData;
 use App\Models\User;
 use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -120,14 +121,69 @@ class DosenController extends Controller {
 
 
 
-    public function editDataMahasiswa() {
-        return View("dosen.edit-mahasiswa");
+    public function editDataMahasiswaView($id) {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+
+        $user = Auth::user();
+
+        return view("dosen.edit-mahasiswa")->with(
+            [
+                "user" => $user,
+                "mahasiswa" => $mahasiswa
+            ]
+        );
     }
+
+    public function actionEditDataMahasiswa(Request $request) {
+        try {
+
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'nim' => 'required|string|max:100',
+                'name' => 'required|string|max:200',
+                'birth_place' => 'required|string|max:100',
+                'birth_date' => 'required|date',
+                'username' => 'string|max:100',
+                'email' => 'required|email|max:200',
+                'password' => 'nullable|string|min:8|max:255',
+            ]);
+            // Temukan mahasiswa berdasarkan ID
+            $mahasiswa = Mahasiswa::findOrFail($data['id']);
+
+            // Periksa apakah ada email lain yang sudah digunakan
+            if (User::where('email', $data['email'])->where('id', '!=', $mahasiswa->user_id)->exists()) {
+                return redirect()->back()->with('error', 'Email sudah digunakan.');
+            }
+
+            // Temukan akun pengguna yang terkait
+            $user = User::findOrFail($mahasiswa->user_id);
+
+            if (!empty($data['password'])) {
+                $user->password = Hash::make($data['password']);
+            }
+
+            $user->username = $data['username'];
+            $user->email = $data['email'];
+            $user->save();
+
+            // Update data mahasiswa
+            $mahasiswa->nim = $data['nim'];
+            $mahasiswa->name = $data['name'];
+            $mahasiswa->birth_place = $data['birth_place'];
+            $mahasiswa->birth_date = $data['birth_date'];
+            $mahasiswa->save();
+            error_log("done update");
+            return redirect()->route('dosen.data.mahasiswa')->with('success', 'Data mahasiswa berhasil di perbarui');
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+
     public function actionDeleteDataMahasiswa($id) {
         try {
             $mahasiswa = Mahasiswa::find($id);
-
-
 
             if ($mahasiswa) {
                 ReqUpdateData::where("mahasiswa_id", $mahasiswa->id)->delete();

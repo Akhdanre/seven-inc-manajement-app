@@ -14,41 +14,66 @@
             </button>
         </div>
 
+
+        @if(session('success'))
+        <div id="success-notification" class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+            {{ session('error') }}
+        </div>
+        @endif
+
+        @if($errors->any())
+        <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-10">
 
-            <form action="#" method="POST">
+            <form action="/dosen/action/data/mahasiswa/edit" method="POST">
+                @csrf
+                <input type="number" name="id" id="id" value="{{$mahasiswa->id}}" hidden>
                 <div class="mb-4">
-                    <label for="nip" class="block text-sm font-medium text-gray-700">NIM</label>
-                    <input type="text" id="nip" name="nip" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <label for="nim" class="block text-sm font-medium text-gray-700">NIM</label>
+                    <input type="text" id="nim" name="nim" value="{{$mahasiswa->nim}}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </div>
 
                 <div class="mb-4">
-                    <label for="nama" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                    <input type="text" id="nama" name="nama" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <label for="name" class="block text-sm font-medium text-gray-700">Name Lengkap</label>
+                    <input type="text" id="name" name="name" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value="{{ $mahasiswa->name}}" required>
                 </div>
 
                 <div class="mb-4">
                     <label for="ttl" class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir dan Tanggal Lahir</label>
                     <div class="flex space-x-4">
-                        <input type="text" id="tempatlahir" name="tempatlahir" placeholder="Tempat Lahir" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                        <input type="date" id="tanggallahir" name="tanggallahir" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                        <input type="text" id="birth_place" name="birth_place" value="{{$mahasiswa->birth_place}}" placeholder="Tempat Lahir" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                        <input type="date" id="birth_date" name="birth_date" value="{{$mahasiswa->birth_date}}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                     </div>
                 </div>
 
 
                 <div class="mb-4">
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" id="username" name="username" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <input type="text" id="username" name="username" value="{{$mahasiswa->user->username}}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
                 </div>
 
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <input type="email" id="email" name="email" value="{{$mahasiswa->user->email}}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </div>
 
                 <div class="mb-4">
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="password" name="password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <input type="password" id="password" name="password" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 </div>
 
                 <div>
