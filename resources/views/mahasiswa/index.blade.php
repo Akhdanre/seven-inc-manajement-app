@@ -4,21 +4,33 @@
 
 @include('layouts.sidebar-mahasiswa', ['username'=> $account['username']])
 
-@if(session('success'))
-<div class="bg-green-500 text-white p-4 rounded-lg mb-4">
-  {{ session('success') }}
-</div>
-@endif
 
-@if(session('error'))
-<div class="bg-red-500 text-white p-4 rounded-lg mb-4">
-  {{ session('error') }}
-</div>
-@endif
 
 <div class="w-full overflow-x-hidden border-t flex flex-col">
   <main class="w-full flex-grow p-6">
     <h1 class="text-3xl text-black pb-6">Data Akademik</h1>
+    @if(session('success'))
+    <div id="success-notification" class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
+      {{ session('success') }}
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+      {{ session('error') }}
+    </div>
+    @endif
+
+    @if($errors->any())
+    <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+      <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
+    @endif
+
     <div class="w-full max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden flex">
       <!-- Foto -->
       <div class="w-1/3 bg-gray-200">
@@ -65,7 +77,7 @@
 <div id="popup-form" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
   <div class="bg-white p-8 rounded-lg shadow-lg w-1/2">
     <h2 class="text-2xl font-semibold mb-4">Update Data</h2>
-    <form action="/action/update/data/request" method="POST">
+    <form action="/mahasiswa/action/update/data/request" method="POST">
       @csrf
       <div class="mb-4">
         <input type="hidden" name="mahasiswa_id" value="{{ $data->id ?? ''}}">
@@ -90,6 +102,22 @@
     const popup = document.getElementById('popup-form');
     popup.classList.toggle('hidden');
   }
+
+
+  setTimeout(function() {
+    var successNotification = document.getElementById('success-notification');
+    if (successNotification) {
+      successNotification.style.display = 'none';
+    }
+  }, 3000);
+
+  // Menghilangkan notifikasi error setelah 3 detik
+  setTimeout(function() {
+    var errorNotification = document.getElementById('error-notification');
+    if (errorNotification) {
+      errorNotification.style.display = 'none';
+    }
+  }, 3000);
 </script>
 
 @endsection
