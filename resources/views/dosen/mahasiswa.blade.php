@@ -16,7 +16,7 @@
 <div class="w-full overflow-x-hidden border-t flex flex-col">
   <main class="w-full flex-grow p-6">
     <div class="grid grid-cols-2 gap-2 items-center pb-2">
-      <h1 class="text-3xl text-black">Data Kelas (Teknik Informatika A)</h1>
+      <h1 class="text-3xl text-black">Kelas {{$waliDosen->name}} </h1>
       <a href="{{ route('dosen.add.data.mahasiswa') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-50 justify-self-end">
         Tambah Mahasiswa
       </a>

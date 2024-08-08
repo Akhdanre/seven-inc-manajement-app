@@ -16,23 +16,45 @@
 
         </div>
 
-        <form action="/dosen/data/mahasiswa/add" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-10">
+        @if(session('success'))
+        <div id="success-notification" class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
+            {{ session('success') }}
+        </div>
+        @endif
 
+        @if(session('error'))
+        <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+            {{ session('error') }}
+        </div>
+        @endif
+
+        @if($errors->any())
+        <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
+        <form action="/dosen/action/data/mahasiswa/add" method="POST" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-10">
+            @csrf
             <div class="mb-4">
-                <label for="nip" class="block text-sm font-medium text-gray-700">NIM</label>
-                <input type="text" id="nip" name="nip" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                <label for="nim" class="block text-sm font-medium text-gray-700">NIM</label>
+                <input type="text" id="nim" name="nim" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
             </div>
 
             <div class="mb-4">
-                <label for="nama" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                <input type="text" id="nama" name="nama" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                <input type="text" id="name" name="name" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
             </div>
 
             <div class="mb-4">
                 <label for="ttl" class="block text-sm font-medium text-gray-700 mb-1">Tempat Lahir dan Tanggal Lahir</label>
                 <div class="flex space-x-4">
-                    <input type="text" id="tempatlahir" name="tempatlahir" placeholder="Tempat Lahir" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                    <input type="date" id="tanggallahir" name="tanggallahir" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <input type="text" id="birth_place" name="birth_place" placeholder="Tempat Lahir" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <input type="date" id="birth_date" name="birth_date" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                 </div>
             </div>
 

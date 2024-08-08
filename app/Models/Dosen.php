@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Dosen extends Model
-{
+class Dosen extends Model {
     use HasFactory;
 
     protected $table = "dosens";
@@ -25,8 +24,7 @@ class Dosen extends Model
         "role_id"
     ];
 
-    public function kelas()
-    {
-        return $this->hasMany(Kelas::class, 'id');
+    public function kelas() {
+        return $this->belongsTo(Kelas::class, 'kelas_id', 'id');
     }
 }

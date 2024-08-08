@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mahasiswas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("user_id")->nullable(false);
-            $table->unsignedBigInteger("kelas_id")->nullable(false);
+            $table->unsignedBigInteger("kelas_id")->nullable(true);
             $table->string("nim", 100)->nullable(false);
             $table->string("name", 200)->nullable(false);
             $table->string("birth_place", 100);

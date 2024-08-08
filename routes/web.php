@@ -26,9 +26,12 @@ Route::post('/logout', [AuthController::class, 'actionlogout'])->name('actionLog
 Route::prefix('dosen')->middleware('role:2')->group(function () {
     Route::get('/home', [DosenController::class, 'dosenView'])->name("dosen.home");
     Route::get('/data/mahasiswa', [DosenController::class, 'dosenDataMahasiswa'])->name("dosen.data.mahasiswa");
-    Route::get('/data/mahasiswa/add', [DosenController::class, 'addDataMahasiswa'])->name("dosen.add.data.mahasiswa");
-    Route::get('/data/mahasiswa/edit', [DosenController::class, 'editDataMahasiswa'])->name("dosen.edit.data.mahasiswa");
-    Route::get('/data/mahasiswa/delete', [DosenController::class, 'deleteDataMahasiswa'])->name("dosen.delete.data.mahasiswa");
+    Route::get('/data/mahasiswa/add', [DosenController::class, 'addDataMahasiswaView'])->name("dosen.add.data.mahasiswa");
+    Route::get('/data/mahasiswa/edit', [DosenController::class, 'editDataMahasiswaView'])->name("dosen.edit.data.mahasiswa");
+    Route::get('/data/mahasiswa/delete', [DosenController::class, 'deleteDataMahasiswaView'])->name("dosen.delete.data.mahasiswa");
+
+    Route::post('/action/data/mahasiswa/add', [DosenController::class, 'actionAddDataMahasiswa']);
+    Route::post('/action/data/mahasiswa/edit', [DosenController::class, 'actionEditDataMahasiswa']);
 });
 
 // Group for Kaprodi
