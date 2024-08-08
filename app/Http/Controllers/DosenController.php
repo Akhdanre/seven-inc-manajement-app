@@ -7,7 +7,9 @@ use App\Http\Requests\UpdateDataMahasiswaRequest;
 use App\Models\Dosen;
 use App\Models\Kelas;
 use App\Models\Mahasiswa;
+use App\Models\ReqUpdateData;
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -121,6 +123,26 @@ class DosenController extends Controller {
     public function editDataMahasiswa() {
         return View("dosen.edit-mahasiswa");
     }
-    public function deleteDataMahasiswa() {
+    public function actionDeleteDataMahasiswa($id) {
+        try {
+            $mahasiswa = Mahasiswa::find($id);
+
+
+
+            if ($mahasiswa) {
+                ReqUpdateData::where("mahasiswa_id", $mahasiswa->id)->delete();
+
+                $mahasiswa->delete();
+
+                User::where('id', $mahasiswa->user_id)->delete();
+
+                return redirect()->route('dosen.data.mahasiswa')->with('success', 'Data mahasiswa berhasil dihapus');
+            } else {
+                return redirect()->route('dosen.data.mahasiswa')->with('error', 'Data mahasiswa tidak ditemukan');
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return redirect()->route('dosen.data.mahasiswa')->with('error', 'Terjadi kesalahan saat menghapus data');
+        }
     }
 }

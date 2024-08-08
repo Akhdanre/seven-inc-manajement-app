@@ -28,10 +28,10 @@ Route::prefix('dosen')->middleware('role:2')->group(function () {
     Route::get('/data/mahasiswa', [DosenController::class, 'dosenDataMahasiswa'])->name("dosen.data.mahasiswa");
     Route::get('/data/mahasiswa/add', [DosenController::class, 'addDataMahasiswaView'])->name("dosen.add.data.mahasiswa");
     Route::get('/data/mahasiswa/edit', [DosenController::class, 'editDataMahasiswaView'])->name("dosen.edit.data.mahasiswa");
-    Route::get('/data/mahasiswa/delete', [DosenController::class, 'deleteDataMahasiswaView'])->name("dosen.delete.data.mahasiswa");
 
     Route::post('/action/data/mahasiswa/add', [DosenController::class, 'actionAddDataMahasiswa']);
     Route::post('/action/data/mahasiswa/edit', [DosenController::class, 'actionEditDataMahasiswa']);
+    Route::delete('/action/data/mahasiswa/delete/{id}', [DosenController::class, 'actionDeleteDataMahasiswa'])->name("dosen.delete.data.mahasiswa");
 });
 
 // Group for Kaprodi

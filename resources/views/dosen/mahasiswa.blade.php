@@ -33,7 +33,7 @@
               <th class="text-left py-3 px-4 uppercase font-semibold text-sm">NIM</th>
               <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Nama Lengkap</th>
               <th class="text-left py-3 px-4 uppercase font-semibold text-sm">TTL</th>
-              <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Access Update</th>
+              <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Request Update</th>
               <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Aksi</th>
             </tr>
           </thead>
@@ -41,7 +41,7 @@
             @foreach($listMahasiswa as $mahasiswa)
             <tr class="{{ $loop->iteration % 2 == 0 ? 'bg-gray-200':''}}">
               <td class=" text-left py-3 px-4">{{ $loop->iteration }}</td>
-              <td class="text-left py-3 px-4">{{ $mahasiswa->id }}</td>
+              <td class="text-left py-3 px-4">{{ $mahasiswa->nim }}</td>
               <td class="text-left py-3 px-4">{{ $mahasiswa->name}}</td>
               <td class="text-left py-3 px-4">{{ $mahasiswa->birth_place }}, {{ $mahasiswa->birth_date }}</td>
               @if ($mahasiswa->edit_status == true)
@@ -58,7 +58,7 @@
                 <button class="text-blue-500 hover:text-blue-700">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="text-red-500 hover:text-red-700 ml-2">
+                <button class="text-red-500 hover:text-red-700 ml-2 flex items-center py-4 pl-6" onclick="confirmDelete('{{$mahasiswa->id }}')">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
@@ -122,6 +122,32 @@
   function togglePopup() {
     const popup = document.getElementById('popup-form');
     popup.classList.toggle('hidden');
+  }
+
+  function confirmDelete(id) {
+    Swal.fire({
+      title: 'Apakah Anda yakin ingin menghapus data mahasiswa ini?',
+      text: "Anda yakin menghapus data ini",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Ganti `id` dengan ID yang sesuai
+        const url = `{{ route('dosen.delete.data.mahasiswa', ['id' => ':id']) }}`.replace(':id', id);
+
+        fetch(url, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}' // Sertakan CSRF token jika diperlukan
+          }
+        })
+      }
+    });
   }
 </script>
 @endsection
