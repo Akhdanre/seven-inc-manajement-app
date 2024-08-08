@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddDataMahasiswaRequest;
 use App\Http\Requests\UpdateDataMahasiswaRequest;
 use App\Models\Dosen;
 use App\Models\Kelas;
 use App\Models\Mahasiswa;
+use App\Models\ReqUpdateData;
 use App\Models\User;
+use Exception;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 use function Laravel\Prompts\error;
 
-class DosenController extends Controller
-{
+class DosenController extends Controller {
     /**
      * Menampilkan halaman indeks dengan total data Kaprodi, Dosen, Kelas, dan Mahasiswa.
      *
      * @return \Illuminate\Http\Response
      */
 
-    public function dosenView(): View
-    {
+    public function dosenView(): View {
 
         $dosen = Auth::user();
 
@@ -42,8 +44,7 @@ class DosenController extends Controller
     }
 
 
-    public function dosenDataMahasiswa()
-    {
+    public function dosenDataMahasiswa() {
 
         $user = Auth::user();
         $dataDosen = Dosen::where("user_id", $user->id)->first();
@@ -52,32 +53,16 @@ class DosenController extends Controller
             $data = Mahasiswa::where("kelas_id", $dataDosen->kelas_id)->get();
         }
 
+
         return view('dosen.mahasiswa')->with([
             "user" => $user,
+            "waliDosen" => isset($dataDosen->kelas) ? $dataDosen->kelas : null,
             "listMahasiswa" => $data
         ]);
     }
 
-    public function addDataMahasiswa(UpdateDataMahasiswaRequest $request)
-    {
-        $data = $request->validated();
-        $hashPass = Hash::make($data["password"]);
-        $userAccount = User::create(
-            [
-                "username" => $data['username'],
-                "email" => $data['email'],
-                "password" => $hashPass,
-                "role_id" => 3
-            ]
-        );
-        $dataMahasiswa = Mahasiswa::create([
-            "user_id" => $userAccount->id,
-            "nim" => $data['nim'],
-            "name" => $data['name'],
-            "birth_place" => $data["birth_place"],
-            "birth_date" => $data['birth_date'],
-            "edit_"
-        ]);
+    public function addDataMahasiswaView() {
+
         $user = Auth::user();
         return View("dosen.add-mahasiswa")->with(
             [
@@ -85,11 +70,135 @@ class DosenController extends Controller
             ]
         );
     }
-    public function editDataMahasiswa()
-    {
-        return View("dosen.edit-mahasiswa");
+
+    public function actionAddDataMahasiswa(AddDataMahasiswaRequest $request) {
+        try {
+            $data = $request->validated();
+
+            if (User::where('email', $data['email'])->exists()) {
+                return redirect()->back()->with('error', 'Email sudah digunakan.');
+            }
+
+            $user = Auth::user();
+            $dataDosen = Dosen::where("user_id", $user->id)->first();
+
+
+            $hashPass = Hash::make($data["password"]);
+
+            $userAccount = User::create([
+                "username" => $data['username'],
+                "email" => $data['email'],
+                "password" => $hashPass,
+                "role_id" => 3
+            ]);
+
+            Mahasiswa::create([
+                "user_id" => $userAccount->id,
+                "kelas_id" => $dataDosen->kelas->id,
+                "nim" => $data["nim"] ?? $this->generateUniqueNim(),
+                "name" => $data['name'],
+                "birth_place" => $data["birth_place"],
+                "birth_date" => $data['birth_date']
+            ]);
+
+            return redirect()->back()->with('success', 'Data mahasiswa berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
-    public function deleteDataMahasiswa()
-    {
+
+    private function generateUniqueNim() {
+        do {
+            $randomId = strtoupper(bin2hex(random_bytes(3))); // Generates a random 6-character hex string
+            $datePrefix = 'E-' . date('Y-m') . '-';
+            $nim = $datePrefix . $randomId;
+
+            // Check if NIM is unique
+        } while (Mahasiswa::where('nim', $nim)->exists());
+
+        return $nim;
+    }
+
+
+
+    public function editDataMahasiswaView($id) {
+        $mahasiswa = Mahasiswa::findOrFail($id);
+
+        $user = Auth::user();
+
+        return view("dosen.edit-mahasiswa")->with(
+            [
+                "user" => $user,
+                "mahasiswa" => $mahasiswa
+            ]
+        );
+    }
+
+    public function actionEditDataMahasiswa(Request $request) {
+        try {
+
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'nim' => 'required|string|max:100',
+                'name' => 'required|string|max:200',
+                'birth_place' => 'required|string|max:100',
+                'birth_date' => 'required|date',
+                'username' => 'string|max:100',
+                'email' => 'required|email|max:200',
+                'password' => 'nullable|string|min:8|max:255',
+            ]);
+            // Temukan mahasiswa berdasarkan ID
+            $mahasiswa = Mahasiswa::findOrFail($data['id']);
+
+            // Periksa apakah ada email lain yang sudah digunakan
+            if (User::where('email', $data['email'])->where('id', '!=', $mahasiswa->user_id)->exists()) {
+                return redirect()->back()->with('error', 'Email sudah digunakan.');
+            }
+
+            // Temukan akun pengguna yang terkait
+            $user = User::findOrFail($mahasiswa->user_id);
+
+            if (!empty($data['password'])) {
+                $user->password = Hash::make($data['password']);
+            }
+
+            $user->username = $data['username'];
+            $user->email = $data['email'];
+            $user->save();
+
+            // Update data mahasiswa
+            $mahasiswa->nim = $data['nim'];
+            $mahasiswa->name = $data['name'];
+            $mahasiswa->birth_place = $data['birth_place'];
+            $mahasiswa->birth_date = $data['birth_date'];
+            $mahasiswa->save();
+            error_log("done update");
+            return redirect()->route('dosen.data.mahasiswa')->with('success', 'Data mahasiswa berhasil di perbarui');
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+
+    public function actionDeleteDataMahasiswa($id) {
+        try {
+            $mahasiswa = Mahasiswa::find($id);
+
+            if ($mahasiswa) {
+                ReqUpdateData::where("mahasiswa_id", $mahasiswa->id)->delete();
+
+                $mahasiswa->delete();
+
+                User::where('id', $mahasiswa->user_id)->delete();
+
+                return redirect()->route('dosen.data.mahasiswa', ['refresh' => 'true'])->with('success', 'Data mahasiswa berhasil dihapus');
+            } else {
+                return redirect()->route('dosen.data.mahasiswa')->with('error', 'Data mahasiswa tidak ditemukan');
+            }
+        } catch (\Exception $e) {
+            error_log($e->getMessage());
+            return redirect()->route('dosen.data.mahasiswa')->with('error', 'Terjadi kesalahan saat menghapus data');
+        }
     }
 }

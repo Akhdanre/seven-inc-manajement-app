@@ -4,12 +4,12 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateDataMahasiswaRequest extends FormRequest {
+class AddDataMahasiswaRequest extends FormRequest {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool {
-        return true; // Ubah menjadi true jika ingin mengizinkan permintaan ini
+        return true;
     }
 
     /**
@@ -19,14 +19,13 @@ class UpdateDataMahasiswaRequest extends FormRequest {
      */
     public function rules(): array {
         return [
-            'id' => 'required|numeric',
             'nim' => 'required|string|max:100',
             'name' => 'required|string|max:200',
             'birth_place' => 'required|string|max:100',
             'birth_date' => 'required|date',
-            'username' => 'string|max:100',
+            'username' => 'required|string|max:100',
             'email' => 'required|email|max:200',
-            'password' => 'string|min:8|max:255',
+            'password' => 'required|string|min:8|max:255',
         ];
     }
 }
