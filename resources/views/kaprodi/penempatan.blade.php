@@ -9,7 +9,7 @@
     <div class="grid grid-cols-2 gap-2 items-center pb-2">
       <h1 class="text-3xl text-black">Penempatan Mahasiswa</h1>
       <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-50 justify-self-end">
-        <a href="add-penempatan">Tambah Penempatan</a>
+        <a href="{{ route('kaprodi.add.penempatan') }}">Tambah Penempatan</a>
       </button>
     </div>
 
@@ -63,6 +63,13 @@
                     <a href="{{ route('kaprodi.edit.penempatan', $kelas->kelas_id) }}" class="text-blue-500 hover:text-blue-700">
                         <i class="fas fa-edit"></i>
                     </a>
+                    <form action="{{ route('kaprodi.delete-penempatan', $kelas->kelas_id) }}" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" onclick="confirmDelete(this)" class="text-red-500 hover:text-red-700 ml-2">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
                 </td>
             </tr>
         @endforeach
@@ -70,6 +77,7 @@
         </table>
       </div>
     </div>
+    
 
       <script>
       function confirmDelete(button) {
@@ -78,7 +86,7 @@
           
           Swal.fire({
               title: 'Konfirmasi Hapus',
-              text: "Apakah Anda yakin ingin menghapus dosen ini?",
+              text: "Apakah Anda yakin ingin menghapus data penempatan ini?",
               icon: 'warning',
               showCancelButton: true,
               confirmButtonColor: '#3085d6',

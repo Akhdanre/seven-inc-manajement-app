@@ -52,6 +52,7 @@ Route::prefix('kaprodi')->middleware('role:1')->group(function () {
     Route::post("/store-penempatan", [KaprodiController::class, 'storePenempatan'])->name("kaprodi.store.penempatan");
     Route::get('/data/edit-penempatan/{id}', [KaprodiController::class, 'editPenempatan'])->name('kaprodi.edit.penempatan');
     Route::put('/kaprodi/update-penempatan/{id}', [KaprodiController::class, 'updatePenempatan'])->name('kaprodi.update.penempatan');
+    Route::delete('/delete-penempatan/{id}', [KaprodiController::class, 'deletePenempatan'])->name('kaprodi.delete-penempatan');
 });
 
 // Group for Mahasiswa

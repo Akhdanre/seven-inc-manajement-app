@@ -425,11 +425,21 @@ class KaprodiController extends Controller
         Mahasiswa::where('kelas_id', $id)
                   ->whereNotIn('id', $selectedMahasiswaIds)
                   ->update(['kelas_id' => 0]);
-                  
+
         return redirect()->route('kaprodi.edit.penempatan', $id)
                          ->with('success', 'Data penempatan mahasiswa telah diperbarui.');
     }    
 
+    public function deletePenempatan($id) 
+    {
+        $kelas = Kelas::findOrFail($id);
+
+        Dosen::where('kelas_id', $id)->update(['kelas_id' => 0]);
+
+        Mahasiswa::where('kelas_id', $id)->update(['kelas_id' => 0]);
+        
+        return redirect()->route('kaprodi.data.penempatan')->with('success', 'Data penempatan mahasiswa berhasil dihapus!');
+    }
 
 
 }

@@ -9,7 +9,7 @@
     <div class="grid grid-cols-2 gap-2 items-center pb-2">
       <h1 class="text-3xl text-black">Data Dosen</h1>
       <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-40 justify-self-end">
-        <a href="add-dosen">Tambah Dosen</a>
+        <a href="{{ route('kaprodi.add.dosen') }}">Tambah Dosen</a>
       </button>
     </div>
 
