@@ -75,7 +75,7 @@ class KaprodiController extends Controller
             'nama' => 'required|string|max:255',
             'kodedosen' => 'required|numeric|unique:dosens,kode_dosen',
             // 'kelas_id' => 'required|numeric',
-            'username' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users,username|max:255',
             'email' => 'required|string|email|unique:users,email|max:255',
             'password' => 'required|string|min:8',
         ], [
@@ -92,6 +92,7 @@ class KaprodiController extends Controller
             'username.required' => 'Username harus diisi.',
             'username.string' => 'Username harus berupa teks.',
             'username.max' => 'Username tidak boleh lebih dari 255 karakter.',
+            'username.unique' => 'Username sudah terdaftar.',
             'email.required' => 'Email harus diisi.',
             'email.string' => 'Email harus berupa teks.',
             'email.email' => 'Format email tidak valid.',
@@ -311,13 +312,13 @@ class KaprodiController extends Controller
         $user = Auth::user();
 
         // Mendapatkan data kelas yang belum digunakan
+
         $kelasList = DB::table('kelas')
-        ->where('id', '!=', 0) 
+        ->where('id', '!=', 0)  // Tidak menampilkan id yang sama dengan 0
         ->whereNotIn('id', function ($query) {
-            $query->select('id')->from('dosens');
+            $query->select('id')->from('dosens');  // Menyaring id yang sudah ada di dosens
         })
-        ->get();
-    
+        ->get();         
 
         // Mendapatkan data dosen dengan kelas_id = 0
         $allDataKelas = Dosen::where('kelas_id', 0)
