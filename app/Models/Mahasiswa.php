@@ -34,6 +34,8 @@ class Mahasiswa extends Model
 
     public function requestUpdate(): HasMany
     {
-        return $this->hasMany(ReqUpdateData::class, "mahasiswa_id", "id");
+        return $this->hasMany(ReqUpdateData::class, "mahasiswa_id", "id")
+            ->orderBy('created_at', 'desc')
+            ->take(5);
     }
 }
