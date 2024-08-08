@@ -136,7 +136,7 @@ class DosenController extends Controller {
 
                 User::where('id', $mahasiswa->user_id)->delete();
 
-                return redirect()->route('dosen.data.mahasiswa')->with('success', 'Data mahasiswa berhasil dihapus');
+                return redirect()->route('dosen.data.mahasiswa', ['refresh' => 'true'])->with('success', 'Data mahasiswa berhasil dihapus');
             } else {
                 return redirect()->route('dosen.data.mahasiswa')->with('error', 'Data mahasiswa tidak ditemukan');
             }
