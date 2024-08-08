@@ -69,16 +69,16 @@ class KaprodiController extends Controller
 
     public function storeDosen(Request $request)
     {
-       // Validasi data input
+        // Validasi data input
         $request->validate([
             'nip' => 'required|numeric',
             'nama' => 'required|string|max:255',
             'kodedosen' => 'required|numeric|unique:dosens,kode_dosen',
-            // 'kelas_id' => 'required|numeric',
-            'username' => 'required|string|max:255|unique:users,username|max:255',
-            'email' => 'required|string|email|unique:users,email|max:255',
+            'username' => 'required|string|max:255|unique:users,username',
+            'email' => 'required|string|email|unique:users,email',
             'password' => 'required|string|min:8',
         ], [
+            // Pesan kesalahan validasi
             'nip.required' => 'NIP harus diisi.',
             'nip.numeric' => 'NIP harus berupa angka.',
             'nama.required' => 'Nama harus diisi.',
@@ -87,8 +87,6 @@ class KaprodiController extends Controller
             'kodedosen.required' => 'Kode Dosen harus diisi.',
             'kodedosen.numeric' => 'Kode Dosen harus berupa angka.',
             'kodedosen.unique' => 'Kode Dosen sudah terdaftar.',
-            // 'kelas_id.required' => 'ID Kelas harus diisi.',
-            // 'kelas_id.numeric' => 'ID Kelas harus berupa angka.',
             'username.required' => 'Username harus diisi.',
             'username.string' => 'Username harus berupa teks.',
             'username.max' => 'Username tidak boleh lebih dari 255 karakter.',
@@ -103,28 +101,41 @@ class KaprodiController extends Controller
             'password.min' => 'Password harus minimal 8 karakter.',
         ]);
 
-        // Simpan data pengguna ke tabel users
-        $user = User::create([
-            'email' => $request->input('email'),
-            'username' => $request->input('username'),
-            'password' => Hash::make($request->input('password')),
-            'role_id' => 2,
-        ]);
+        // Mulai transaksi database
+        DB::beginTransaction();
 
-        // Simpan data dosen ke tabel dosen
-        Dosen::create([
-            'user_id' => $user->id,
-            'kelas_id' => 0,
-            'kode_dosen' => $request->input('kodedosen'),
-            'nip' => $request->input('nip'),
-            'name' => $request->input('nama'),
-            'role_id' => 2,
-        ]);
+        try {
+            // Simpan data pengguna ke tabel users
+            $user = User::create([
+                'email' => $request->input('email'),
+                'username' => $request->input('username'),
+                'password' => Hash::make($request->input('password')),
+                'role_id' => 2,
+            ]);
 
-        // Redirect atau tampilkan pesan sukses
-        return redirect()->route('kaprodi.data.dosen')->with('success', 'Dosen berhasil ditambahkan!');
+            // Simpan data dosen ke tabel dosen
+            Dosen::create([
+                'user_id' => $user->id,
+                'kelas_id' => 0,
+                'kode_dosen' => $request->input('kodedosen'),
+                'nip' => $request->input('nip'),
+                'name' => $request->input('nama'),
+                'role_id' => 2,
+            ]);
+
+            // Commit transaksi
+            DB::commit();
+
+            // Redirect atau tampilkan pesan sukses
+            return redirect()->route('kaprodi.data.dosen')->with('success', 'Dosen berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            // Rollback transaksi jika terjadi error
+            DB::rollBack();
+
+            // Tampilkan pesan error
+            return redirect()->back()->withErrors('Terjadi kesalahan saat menambahkan data.')->withInput();
+        }
     }
-
     // Method untuk menampilkan form edit dosen
     public function editDosen($id)
     {
