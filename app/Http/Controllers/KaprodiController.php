@@ -312,9 +312,9 @@ class KaprodiController extends Controller
 
         // Mendapatkan data kelas yang belum digunakan
         $kelasList = DB::table('kelas')
-        ->where('id', '!=', null) 
+        ->where('id', '!=', 0) 
         ->whereNotIn('id', function ($query) {
-            $query->select('kelas_id')->from('dosens');
+            $query->select('id')->from('dosens');
         })
         ->get();
     

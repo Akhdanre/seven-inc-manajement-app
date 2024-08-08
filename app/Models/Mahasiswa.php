@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Mahasiswa extends Model
-{
+class Mahasiswa extends Model {
     use HasFactory;
 
     protected $table = "mahasiswas";
@@ -27,13 +27,15 @@ class Mahasiswa extends Model
         "edit_status"
     ];
 
-    public function kelas(): HasOne
-    {
+    public function kelas(): HasOne {
         return $this->hasOne(Kelas::class, "id",  "kelas_id");
     }
 
-    public function requestUpdate(): HasMany
-    {
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class, "user_id", "id");
+    }
+
+    public function requestUpdate(): HasMany {
         return $this->hasMany(ReqUpdateData::class, "mahasiswa_id", "id")
             ->orderBy('created_at', 'desc')
             ->take(5);
