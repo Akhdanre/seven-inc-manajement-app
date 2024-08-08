@@ -3,7 +3,6 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\KaprodiController;
-use App\Http\Controllers\login_controller;
 use App\Http\Controllers\MahasiswaController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'login']);
 Route::post('/actionLogin', [AuthController::class, 'actionLogin'])->name("actionLogin");
-Route::post('/logout', [AuthController::class, 'actionlogout'])->name('actionLogout');
+Route::get('/logout', [AuthController::class, 'actionlogout'])->name('actionLogout');
 
 // Group for Dosen
 Route::prefix('dosen')->middleware('role:2')->group(function () {
