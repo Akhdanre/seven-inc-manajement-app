@@ -10,7 +10,7 @@
                 <div class="grid grid-cols-2 gap-2 items-center pb-2">
                     <h1 class="text-3xl text-black">Tambahkan Dosen</h1>
                     <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-40 justify-self-end">
-                       <a href="dosen"> <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                       <a href="{{ route('kaprodi.data.dosen') }}"> <i class="fa fa-arrow-left" aria-hidden="true"></i>
                          Kembali</a>
                     </button>
                 </div>
@@ -52,7 +52,7 @@
                             <input type="number" id="kodedosen" name="kodedosen" value="{{ old('kodedosen') }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                         </div>
 
-                        <div class="mb-4">
+                        <!-- <div class="mb-4">
                             <label for="kelas_id" class="block text-sm font-medium text-gray-700">Wali Kelas</label>
                             <select name="kelas_id" id="kelas_id" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
                                 <option value="" disabled selected>Pilih Kelas</option>
@@ -60,7 +60,7 @@
                                     <option value="{{ $kelas->id }}">{{ $kelas->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> -->
                         
                 
                         <div class="mb-4">

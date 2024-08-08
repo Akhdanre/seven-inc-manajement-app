@@ -9,6 +9,7 @@ use App\Models\Dosen;
 use App\Models\Users;
 use App\Models\Mahasiswa;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
@@ -73,7 +74,7 @@ class KaprodiController extends Controller
             'nip' => 'required|numeric',
             'nama' => 'required|string|max:255',
             'kodedosen' => 'required|numeric|unique:dosens,kode_dosen',
-            'kelas_id' => 'required|numeric',
+            // 'kelas_id' => 'required|numeric',
             'username' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users,email|max:255',
             'password' => 'required|string|min:8',
@@ -86,8 +87,8 @@ class KaprodiController extends Controller
             'kodedosen.required' => 'Kode Dosen harus diisi.',
             'kodedosen.numeric' => 'Kode Dosen harus berupa angka.',
             'kodedosen.unique' => 'Kode Dosen sudah terdaftar.',
-            'kelas_id.required' => 'ID Kelas harus diisi.',
-            'kelas_id.numeric' => 'ID Kelas harus berupa angka.',
+            // 'kelas_id.required' => 'ID Kelas harus diisi.',
+            // 'kelas_id.numeric' => 'ID Kelas harus berupa angka.',
             'username.required' => 'Username harus diisi.',
             'username.string' => 'Username harus berupa teks.',
             'username.max' => 'Username tidak boleh lebih dari 255 karakter.',
@@ -112,7 +113,7 @@ class KaprodiController extends Controller
         // Simpan data dosen ke tabel dosen
         Dosen::create([
             'user_id' => $user->id,
-            'kelas_id' => $request->input('kelas_id'),
+            'kelas_id' => 0,
             'kode_dosen' => $request->input('kodedosen'),
             'nip' => $request->input('nip'),
             'name' => $request->input('nama'),
@@ -152,7 +153,7 @@ class KaprodiController extends Controller
             // 'nip' => 'required|numeric',
             'nama' => 'required|string|max:255',
             // 'kodedosen' => 'required|numeric',
-            'kelasid' => 'required|numeric',
+            // 'kelasid' => 'required|numeric',
             // 'username' => 'required|string|max:255',
             // 'email' => 'required|string|email|max:255',
             'password' => 'nullable|string|min:8',
@@ -169,7 +170,7 @@ class KaprodiController extends Controller
             // 'nip' => $request->nip,
             'name' => $request->nama,
             // 'kode_dosen' => $request->kodedosen,
-            'kelas_id' => $request->kelasid,
+            // 'kelas_id' => $request->kelasid,
         ]);
 
         // Update data user
@@ -278,4 +279,167 @@ class KaprodiController extends Controller
     
         return redirect()->route('kaprodi.data.kelas')->with('success', 'Kelas berhasil dihapus!');
     }
+
+    public function kaprodiPenempatanView(): View
+{
+    $user = Auth::user();
+    
+    // Ambil semua data kelas yang memiliki dosen yang terkait
+    $allDataKelas = DB::table('dosens')
+        ->join('kelas', 'dosens.kelas_id', '=', 'kelas.id')
+        ->select('dosens.name as dosen_name', 'kelas.name as kelas_name', 'kelas.kapasitas', 'kelas.id as kelas_id')
+        ->where('kelas.id', '!=', 0) 
+        ->get();
+    
+    // Ambil data mahasiswa berdasarkan kelas_id yang terdaftar
+    $mahasiswaPerKelas = [];
+    foreach ($allDataKelas as $dataKelas) {
+        $mahasiswaPerKelas[$dataKelas->kelas_id] = DB::table('mahasiswas')
+            ->where('kelas_id', $dataKelas->kelas_id)
+            ->get(['id', 'name']);
+    }
+    
+    return view('kaprodi.penempatan')->with([
+        'username' => $user->username,
+        'data' => $allDataKelas,
+        'mahasiswaPerKelas' => $mahasiswaPerKelas,
+    ]);
+}
+
+    public function kaprodiAddPenempatan()
+    {
+        $user = Auth::user();
+
+        // Mendapatkan data kelas yang belum digunakan
+        $kelasList = DB::table('kelas')
+        ->where('id', '!=', null) 
+        ->whereNotIn('id', function ($query) {
+            $query->select('kelas_id')->from('dosens');
+        })
+        ->get();
+    
+
+        // Mendapatkan data dosen dengan kelas_id = 0
+        $allDataKelas = Dosen::where('kelas_id', 0)
+            ->select('id', 'name as dosen_name', 'kelas_id')
+            ->get();
+
+        // Mendapatkan data mahasiswa yang memiliki kelas_id 0
+        $mahasiswaList = DB::table('mahasiswas')
+            ->where('kelas_id', 0)
+            ->get();
+
+        return view('kaprodi.add-penempatan')->with([
+            'username' => $user->username,
+            'data' => $allDataKelas,
+            'kelasList' => $kelasList,
+            'mahasiswaList' => $mahasiswaList,
+        ]);
+    }
+
+    public function storePenempatan(Request $request)
+    {
+        // Validasi data yang diterima
+        $validatedData = $request->validate([
+            'mahasiswa_ids' => 'required|array',
+            'mahasiswa_ids.*' => 'exists:mahasiswas,id',
+            'kelas_id' => 'required|exists:kelas,id',
+            'dosen_id' => 'required|exists:dosens,id'
+        ], [
+            'mahasiswa_ids.required' => 'Maaf, Anda harus memilih setidaknya satu mahasiswa.',
+            'mahasiswa_ids.array' => 'Data mahasiswa yang dipilih tidak valid.',
+            'mahasiswa_ids.*.exists' => 'Mahasiswa dengan ID yang dipilih tidak ditemukan.',
+            'kelas_id.required' => 'Kelas yang dipilih tidak boleh kosong.',
+            'kelas_id.exists' => 'Kelas yang dipilih tidak valid.',
+            'dosen_id.required' => 'Dosen yang dipilih tidak boleh kosong.',
+            'dosen_id.exists' => 'Dosen yang dipilih tidak valid.'
+        ]);        
+    
+        // Ambil ID mahasiswa yang dipilih dan ID kelas
+        $mahasiswaIds = $validatedData['mahasiswa_ids'];
+        $kelasId = $validatedData['kelas_id'];
+        $dosenId = $validatedData['dosen_id'];
+    
+        // Update kelas_id untuk mahasiswa yang dipilih
+        DB::table('mahasiswas')
+            ->whereIn('id', $mahasiswaIds)
+            ->update(['kelas_id' => $kelasId]);
+    
+        // Update kelas_id untuk dosen dengan ID yang dipilih
+        DB::table('dosens')
+            ->where('id', $dosenId)
+            ->update(['kelas_id' => $kelasId]);
+    
+        // Redirect atau beri respons sesuai kebutuhan
+        return redirect()->route('kaprodi.data.penempatan')->with('success', 'Data penempatan mahasiswa dan dosen berhasil disimpan.');
+    }    
+
+    public function editPenempatan($id)
+    {
+        // Mengambil data kelas berdasarkan ID
+        $kelas = Kelas::findOrFail($id);
+    
+        // Mengambil nama dosen yang terkait dengan kelas ini
+        $dosen = Dosen::where('kelas_id', $id)->first();
+    
+        // Mengambil semua mahasiswa dengan kelas_id 0 dan kelas_id sesuai $id
+        $mahasiswaList = DB::table('mahasiswas')
+        ->select('*')
+        ->where('kelas_id', $id)
+        ->union(
+            DB::table('mahasiswas')
+                ->select('*')
+                ->where('kelas_id', 0)
+        )
+        ->get();
+
+        // Mengambil ID mahasiswa yang sudah dipilih untuk kelas ini
+        $selectedMahasiswaIds = DB::table('mahasiswas')
+            ->where('kelas_id', $id)
+            ->pluck('id')
+            ->toArray();
+    
+        // Mengirim data ke view
+        return view('kaprodi.edit-penempatan', [
+            'kelas' => $kelas,
+            'dosen' => $dosen,
+            'mahasiswaList' => $mahasiswaList,
+            'selectedMahasiswaIds' => $selectedMahasiswaIds,
+        ]);
+    }
+    
+    public function updatePenempatan(Request $request, $id)
+    {
+        $request->validate([
+            'mahasiswa_ids' => 'array|nullable',
+            'mahasiswa_ids.*' => 'integer|exists:mahasiswas,id',
+        ]);
+    
+        
+        $kelas = Kelas::findOrFail($id);
+    
+        $selectedMahasiswaIds = $request->input('mahasiswa_ids', []);
+    
+        Mahasiswa::whereIn('id', $selectedMahasiswaIds)->update(['kelas_id' => $id]);
+
+        Mahasiswa::where('kelas_id', $id)
+                  ->whereNotIn('id', $selectedMahasiswaIds)
+                  ->update(['kelas_id' => 0]);
+
+        return redirect()->route('kaprodi.edit.penempatan', $id)
+                         ->with('success', 'Data penempatan mahasiswa telah diperbarui.');
+    }    
+
+    public function deletePenempatan($id) 
+    {
+        $kelas = Kelas::findOrFail($id);
+
+        Dosen::where('kelas_id', $id)->update(['kelas_id' => 0]);
+
+        Mahasiswa::where('kelas_id', $id)->update(['kelas_id' => 0]);
+        
+        return redirect()->route('kaprodi.data.penempatan')->with('success', 'Data penempatan mahasiswa berhasil dihapus!');
+    }
+
+
 }
