@@ -53,7 +53,7 @@
                             <input type="number" id="kodedosen" name="kodedosen" value="{{ $dosen->kode_dosen }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" disabled>
                         </div>
 
-                        <div class="mb-4">
+                        <!-- <div class="mb-4">
                             <label for="kelas_name" class="block text-sm font-medium text-gray-700">Kelas</label>
                             <select id="kelasid" name="kelasid" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <option value="" disabled>Pilih Kelas</option>
@@ -61,7 +61,7 @@
                                     <option value="{{ $kelas->id }}" {{ $kelas->id == $dosen->kelas_id ? 'selected' : '' }}>{{ $kelas->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> -->
                                             
                         <div class="mb-4">
                             <label for="username" class="block text-sm font-medium text-gray-700">Username</label>

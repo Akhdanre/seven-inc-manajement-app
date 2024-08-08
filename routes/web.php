@@ -47,6 +47,11 @@ Route::prefix('kaprodi')->middleware('role:1')->group(function () {
     Route::get('/data/edit-kelas/{id}', [KaprodiController::class, 'editKelas'])->name('kaprodi.edit.kelas');
     Route::put('/update-kelas/{id}', [KaprodiController::class, 'updateKelas'])->name('kaprodi.update-kelas');
     Route::delete('/delete-kelas/{id}', [KaprodiController::class, 'deleteKelas'])->name('kaprodi.delete-kelas');
+    Route::get('/data/penempatan', [KaprodiController::class, 'kaprodiPenempatanView'])->name("kaprodi.data.penempatan");
+    Route::get("/data/add-penempatan", [KaprodiController::class, 'kaprodiAddPenempatan'])->name("kaprodi.add.penempatan");
+    Route::post("/store-penempatan", [KaprodiController::class, 'storePenempatan'])->name("kaprodi.store.penempatan");
+    Route::get('/data/edit-penempatan/{id}', [KaprodiController::class, 'editPenempatan'])->name('kaprodi.edit.penempatan');
+    Route::put('/kaprodi/update-penempatan/{id}', [KaprodiController::class, 'updatePenempatan'])->name('kaprodi.update.penempatan');
 });
 
 // Group for Mahasiswa
