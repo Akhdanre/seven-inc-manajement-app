@@ -17,9 +17,11 @@
   <main class="w-full flex-grow p-6">
     <div class="grid grid-cols-2 gap-2 items-center pb-2">
       <h1 class="text-3xl text-black">Data Kelas (Teknik Informatika A)</h1>
-      <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-50 justify-self-end">
+      <a href="{{ route('dosen.add.data.mahasiswa') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-50 justify-self-end">
         Tambah Mahasiswa
-      </button>
+      </a>
+
+
     </div>
 
     <div class="w-full">
@@ -48,11 +50,9 @@
               </td>
               @else
               <td class="text-left py-3 px-4">
-                <button class="bg-green-500 text-white text-sm px-2 py-1 rounded" onclick="showPopup('{{ $mahasiswa->requestUpdate }}', '{{ $mahasiswa->id }}', '{{ $mahasiswa->name }}')">tidak</button>
+                <button class="bg-yellow-500 text-white text-sm px-2 py-1 rounded">tidak</button>
               </td>
-              <!-- <td class="text-left py-3 px-4">
-                <button class="bg-red-500 text-white text-sm px-2 py-1 rounded">tidak</button>
-              </td> -->
+
               @endif
               <td class="text-left py-3 px-4">
                 <button class="text-blue-500 hover:text-blue-700">
@@ -96,12 +96,12 @@
 
 <script>
   function showPopup(dataChosen, mahasiswaId, kelasId) {
-    
+
     document.getElementById('popup-mahasiswa-id').value = mahasiswaId;
     document.getElementById('popup-kelas-id').value = kelasId;
     const container = document.getElementById('dynamic-fields');
     let data = JSON.parse(dataChosen);
-    
+
 
     container.innerHTML = '';
 
