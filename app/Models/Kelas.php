@@ -16,6 +16,7 @@ class Kelas extends Model {
     public $incrementing = true;
 
     protected $fillable =  [
+        "id",
         "name",
         "kapasitas"
     ];
