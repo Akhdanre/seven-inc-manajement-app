@@ -3,11 +3,11 @@
         <a href="{{route('dosen.home')}}" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">E-Data</a>
     </div>
     <nav class="text-white text-base font-semibold pt-3">
-        <a href="{{route('dosen.home')}}" class="{{ Request::is('*home') ? 'active-nav-link' : '' }} flex items-center active-nav-link text-white py-4 pl-6 nav-item">
+        <a href="{{route('dosen.home')}}" class="{{ Request::is('*home') ? 'active-nav-link' : '' }} flex items-center text-white py-4 pl-6 nav-item">
             <i class="fas fa-tachometer-alt mr-3"></i>
             Dashboard
         </a>
-        <a href="{{route('dosen.data.mahasiswa')}}" class="{{ Request::is('*kelas') ? 'active-nav-link' : '' }} flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+        <a href="{{route('dosen.data.mahasiswa')}}" class="{{ Request::is('*mahasiswa') ? 'active-nav-link' : '' }} flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
             <i class="fas fa-sticky-note mr-3"></i>
             Data Kelas
         </a>
@@ -34,7 +34,6 @@
             </button>
             <button x-show="isOpen" @click="isOpen = false" class="h-full w-full fixed inset-0 cursor-default"></button>
             <div x-show="isOpen" class="absolute w-32 bg-white rounded-lg shadow-lg py-2 mt-16">
-                <a href="#" class="block px-4 py-2 account-link hover:text-white">Edit Profile</a>
                 <a href="#" class="block px-4 py-2 account-link hover:text-white">Keluar</a>
             </div>
         </div>
