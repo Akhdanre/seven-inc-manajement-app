@@ -41,7 +41,8 @@
                         <!--  Nama Kelas -->
                         <div class="mb-4">
                             <label for="kelas_name" class="block text-sm font-medium text-gray-700">Nama Kelas</label>
-                            <input type="text" id="kelas_name" name="kelas_name" value="{{ $kelas->name }}" disabled class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <input type="text" id="kelas_name" name="kelas_name" value="{{ $kelas->name }} (maks. {{ $kelas->kapasitas }} Mahasiswa)" disabled class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <input type="hidden" id="maxCapacity" value="{{ $kelas->kapasitas }}">
                         </div>
 
                         <!-- Dropdown Nama Dosen -->
@@ -86,19 +87,47 @@
                         </div>
 
                         <script>
-                            function updateSelectedStudents() {
-                                const selectedCheckboxes = document.querySelectorAll('input[name="mahasiswa_ids[]"]:checked');
-                                const selectedCount = selectedCheckboxes.length;
-                                document.getElementById('selectedCount').textContent = `${selectedCount} mahasiswa terpilih`;
-                            }
+                        // Fungsi untuk mengambil kapasitas maksimal dari elemen hidden
+                        function getMaxCapacity() {
+                            return parseInt(document.getElementById('maxCapacity').value, 10);
+                        }
 
-                            // Initialize the selected count when the page loads
-                            document.addEventListener('DOMContentLoaded', updateSelectedStudents);
+                        function updateMaxCapacity() {
+                            const kelasSelect = document.getElementById('kelas_id');
+                            const selectedOption = kelasSelect.options[kelasSelect.selectedIndex];
+                            maxCapacity = parseInt(selectedOption.getAttribute('data-kapasitas'), 10);
+                            updateSelectedStudents();
+                        }
+
+                        function updateSelectedStudents() {
+                            const maxCapacity = getMaxCapacity(); // Ambil kapasitas terbaru
+                            const checkboxes = document.querySelectorAll('input[name="mahasiswa_ids[]"]:checked');
+                            const selectedCount = checkboxes.length;
+                            document.getElementById('selectedCount').textContent = `${selectedCount} mahasiswa terpilih`;
+
+                            if (selectedCount >= maxCapacity) {
+                                document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach((checkbox) => {
+                                    if (!checkbox.checked) {
+                                        checkbox.disabled = true;
+                                    }
+                                });
+                            } else {
+                                document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach((checkbox) => {
+                                    checkbox.disabled = false;
+                                });
+                            }
+                        }
+
+                        document.addEventListener('DOMContentLoaded', function() {
+                            updateSelectedStudents(); // Initialize selected students count
+                            document.getElementById('kelas_id').addEventListener('change', updateMaxCapacity);
 
                             document.getElementById('selectAll').addEventListener('click', function(e) {
                                 e.preventDefault();
                                 document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach(checkbox => {
-                                    checkbox.checked = true;
+                                    if (!checkbox.disabled) {
+                                        checkbox.checked = true;
+                                    }
                                 });
                                 updateSelectedStudents();
                             });
@@ -115,7 +144,9 @@
                             document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach(checkbox => {
                                 checkbox.addEventListener('change', updateSelectedStudents);
                             });
-                        </script>
+                        });
+                    </script>
+
 
 
                         <!-- Submit Button -->

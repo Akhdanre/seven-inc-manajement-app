@@ -309,10 +309,10 @@ class KaprodiController extends Controller {
         // Mendapatkan data kelas yang belum digunakan
 
         $kelasList = DB::table('kelas')
-            ->where('id', '!=', 0)
-            ->whereNotIn('id', function ($query) {
-                $query->select('id')->from('dosens');
-            })
+            ->leftJoin('dosens', 'kelas.id', '=', 'dosens.kelas_id')
+            ->where('kelas.id', '!=', 0)
+            ->whereNull('dosens.kelas_id')
+            ->select('kelas.*')
             ->get();
 
         // Mendapatkan data dosen dengan kelas_id = 0
