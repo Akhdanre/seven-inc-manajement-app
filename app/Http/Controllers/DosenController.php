@@ -3,19 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AddDataMahasiswaRequest;
-use App\Http\Requests\UpdateDataMahasiswaRequest;
 use App\Models\Dosen;
 use App\Models\Kelas;
 use App\Models\Mahasiswa;
 use App\Models\ReqUpdateData;
 use App\Models\User;
-use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-
-use function Laravel\Prompts\error;
 
 class DosenController extends Controller {
     /**
