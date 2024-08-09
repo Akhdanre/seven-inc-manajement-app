@@ -2,7 +2,7 @@
 
 @section('contents')
 
-@include('layouts.sidebar-dosen', ['username' => $user->username])
+@include('layouts.sidebar-main', ['username' => $user->username, 'role' => $user->role_id])
 
 <div class="w-full overflow-x-hidden border-t flex flex-col">
     <main class="w-full flex-grow p-6">

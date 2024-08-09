@@ -1,18 +1,25 @@
 <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
     <div class="p-6">
-        <a href="{{route('dosen.home')}}" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">E-Data</a>
+        <a href="{{route('kaprodi.home')}}" class="text-white text-3xl font-semibold uppercase hover:text-gray-300">E-Data</a>
     </div>
     <nav class="text-white text-base font-semibold pt-3">
-        <a href="{{route('dosen.home')}}" class="{{ Request::is('*home') ? 'active-nav-link' : '' }} flex items-center text-white py-4 pl-6 nav-item">
+        <a href="{{route('kaprodi.home')}}" class="{{ Request::is('*home') ? 'active-nav-link' : '' }} flex items-center text-white py-4 pl-6 nav-item">
             <i class="fas fa-tachometer-alt mr-3"></i>
             Dashboard
         </a>
-        <a href="{{route('dosen.data.mahasiswa')}}" class="{{ Request::is('*mahasiswa') ? 'active-nav-link' : '' }} flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+        <a href="{{route('kaprodi.data.dosen')}}" class="{{ Request::is('*dosen') ? 'active-nav-link' : '' }} flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
             <i class="fas fa-sticky-note mr-3"></i>
+            Data Dosen
+        </a>
+        <a href="{{route('kaprodi.data.kelas')}}" class="{{ Request::is('*kelas') ? 'active-nav-link' : '' }} flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+            <i class="fas fa-table mr-3"></i>
             Data Kelas
         </a>
-
-        <a href="{{route('actionLogout')}}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+        <a href="{{route('kaprodi.data.penempatan')}}" class="{{ Request::is('*penempatan*') ? 'active-nav-link' : '' }} flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+            <i class="fas fa-user mr-3"></i>
+            Penempatan Mahasiswa {{$role}}
+        </a>
+        <a href="kelas.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
             <i class="fas fa-sign-out-alt mr-3"></i>
             Keluar
         </a>
@@ -27,7 +34,8 @@
 
         <div x-data="{ isOpen: false }" class="relative w-1/2 flex justify-end">
             <div class="flex items-center mr-4">
-                <p class="relative">Hai, {{$username}}!</p>
+                <p class="relative">Hai, {{$username ?? 'ouken'}}!</p>
+
             </div>
             <button @click="isOpen = !isOpen" class="realtive z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none">
                 <img src="https://cdn.vectorstock.com/i/500p/53/42/user-member-avatar-face-profile-icon-vector-22965342.jpg">
@@ -57,9 +65,18 @@
             </a>
             <a href="mahasiswa.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
                 <i class="fas fa-sticky-note mr-3"></i>
+                Data Dosen
+            </a>
+
+            <a href="mahasiswa.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                <i class="fas fa-table mr-3"></i>
                 Data Kelas
             </a>
 
+            <a href="mahasiswa.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
+                <i class="fas fa-user mr-3"></i>
+                Penempatan Mahasiswa
+            </a>
             <a href="#" class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item">
                 <i class="fas fa-sign-out-alt mr-3"></i>
                 Keluar

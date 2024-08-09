@@ -19,7 +19,7 @@
             <i class="fas fa-user mr-3"></i>
             Penempatan Mahasiswa
         </a>
-        <a href="kelas.html" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+        <a href="{{route('actionLogout')}}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
             <i class="fas fa-sign-out-alt mr-3"></i>
             Keluar
         </a>
