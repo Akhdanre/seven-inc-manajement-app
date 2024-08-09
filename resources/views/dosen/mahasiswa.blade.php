@@ -15,37 +15,38 @@
 
 <div class="w-full overflow-x-hidden border-t flex flex-col">
   <main class="w-full flex-grow p-6">
-    @if(session('success'))
-    <div id="success-notification" class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
-      {{ session('success') }}
-    </div>
-    @endif
-
-    @if(session('error'))
-    <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
-      {{ session('error') }}
-    </div>
-    @endif
-
-    @if($errors->any())
-    <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
-      <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-      </ul>
-    </div>
-    @endif
+    
     <div class="grid grid-cols-2 gap-2 items-center pb-2">
 
       <h1 class="text-3xl text-black">Kelas {{$waliDosen->name}} </h1>
       <a href="{{ route('dosen.add.data.mahasiswa') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-50 justify-self-end">
         Tambah Mahasiswa
       </a>
-
-
     </div>
 
+    @if(session('success'))
+      <div id="success-notification" class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
+        {{ session('success') }}
+      </div>
+      @endif
+
+      @if(session('error'))
+      <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+        {{ session('error') }}
+      </div>
+      @endif
+
+      @if($errors->any())
+      <div id="error-notification" class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
+        <ul>
+          @foreach ($errors->all() as $error)
+          <li>{{ $error }}</li>
+          @endforeach
+        </ul>
+      </div>
+      @endif
+
+      
     <div class="w-full">
       <div class="bg-white overflow-auto">
         <table class="min-w-full bg-white">

@@ -144,7 +144,31 @@ class DosenController extends Controller {
                 'username' => 'string|max:100',
                 'email' => 'required|email|max:200',
                 'password' => 'nullable|string|min:8|max:255',
+            ], [
+                'id.required' => 'ID wajib diisi.',
+                'id.numeric' => 'ID harus berupa angka.',
+                'nim.required' => 'NIM wajib diisi.',
+                'nim.string' => 'NIM harus berupa string.',
+                'nim.max' => 'NIM tidak boleh lebih dari 100 karakter.',
+                'name.required' => 'Nama wajib diisi.',
+                'name.string' => 'Nama harus berupa string.',
+                'name.max' => 'Nama tidak boleh lebih dari 200 karakter.',
+                'birth_place.required' => 'Tempat lahir wajib diisi.',
+                'birth_place.string' => 'Tempat lahir harus berupa string.',
+                'birth_place.max' => 'Tempat lahir tidak boleh lebih dari 100 karakter.',
+                'birth_date.required' => 'Tanggal lahir wajib diisi.',
+                'birth_date.date' => 'Tanggal lahir harus berupa tanggal yang valid.',
+                'username.string' => 'Username harus berupa string.',
+                'username.max' => 'Username tidak boleh lebih dari 100 karakter.',
+                'email.required' => 'Email wajib diisi.',
+                'email.email' => 'Format email tidak valid.',
+                'email.max' => 'Email tidak boleh lebih dari 200 karakter.',
+                'password.nullable' => 'Password bersifat opsional.',
+                'password.string' => 'Password harus berupa string.',
+                'password.min' => 'Password harus memiliki minimal 8 karakter.',
+                'password.max' => 'Password tidak boleh lebih dari 255 karakter.',
             ]);
+            
             $mahasiswa = Mahasiswa::findOrFail($data['id']);
 
             if (User::where('email', $data['email'])->where('id', '!=', $mahasiswa->user_id)->exists()) {
