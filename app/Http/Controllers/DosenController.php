@@ -75,9 +75,11 @@ class DosenController extends Controller {
         try {
             $data = $request->validated();
 
-            if (User::where('email', $data['email'])->exists()) {
-                return redirect()->back()->with('error', 'Email sudah digunakan.');
+
+            if (User::where('email', $data['email'])->orWhere('username', $data['username'])->exists()) {
+                return redirect()->back()->with('error', 'Email atau Username sudah digunakan.');
             }
+
 
             $user = Auth::user();
             $dataDosen = Dosen::where("user_id", $user->id)->first();
@@ -101,7 +103,7 @@ class DosenController extends Controller {
                 "birth_date" => $data['birth_date']
             ]);
 
-            return redirect()->back()->with('success', 'Data mahasiswa berhasil ditambahkan!');
+            return redirect()->route('dosen.data.mahasiswa')->with('success', 'Data mahasiswa berhasil ditambahkan!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
@@ -147,15 +149,12 @@ class DosenController extends Controller {
                 'email' => 'required|email|max:200',
                 'password' => 'nullable|string|min:8|max:255',
             ]);
-            // Temukan mahasiswa berdasarkan ID
             $mahasiswa = Mahasiswa::findOrFail($data['id']);
 
-            // Periksa apakah ada email lain yang sudah digunakan
             if (User::where('email', $data['email'])->where('id', '!=', $mahasiswa->user_id)->exists()) {
                 return redirect()->back()->with('error', 'Email sudah digunakan.');
             }
 
-            // Temukan akun pengguna yang terkait
             $user = User::findOrFail($mahasiswa->user_id);
 
             if (!empty($data['password'])) {
@@ -166,16 +165,16 @@ class DosenController extends Controller {
             $user->email = $data['email'];
             $user->save();
 
-            // Update data mahasiswa
             $mahasiswa->nim = $data['nim'];
             $mahasiswa->name = $data['name'];
             $mahasiswa->birth_place = $data['birth_place'];
             $mahasiswa->birth_date = $data['birth_date'];
+            $mahasiswa->edit_status = false;
             $mahasiswa->save();
-            error_log("done update");
+            ReqUpdateData::where("mahasiswa_id", $mahasiswa->id)->delete();
+
             return redirect()->route('dosen.data.mahasiswa')->with('success', 'Data mahasiswa berhasil di perbarui');
         } catch (\Exception $e) {
-            error_log($e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }

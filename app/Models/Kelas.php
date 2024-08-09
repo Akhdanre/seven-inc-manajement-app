@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Kelas extends Model
-{
+class Kelas extends Model {
     use HasFactory;
 
     protected $table = "kelas";
@@ -17,13 +16,12 @@ class Kelas extends Model
     public $incrementing = true;
 
     protected $fillable =  [
+        "id",
         "name",
         "kapasitas"
     ];
 
-    public function dosen(): HasOne
-    {
-        return $this->hasOne(Dosen::class, 'id', 'kelas_id');
-
+    public function dosen() {
+        return $this->hasOne(Dosen::class, 'kelas_id');
     }
 }

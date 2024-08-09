@@ -6,17 +6,14 @@ use App\Models\Kelas;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\Dosen;
-use App\Models\Users;
 use App\Models\Mahasiswa;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
-class KaprodiController extends Controller
-{
-    public function kaprodiView(): View
-    {
+class KaprodiController extends Controller {
+    public function kaprodiView(): View {
         $user = Auth::user();
 
         // Hitung total Kaprodi (role_id 1) dan Dosen (role_id 2)
@@ -38,8 +35,7 @@ class KaprodiController extends Controller
         ]);
     }
 
-    public function kaprodiDataDosenView(): View
-    {
+    public function kaprodiDataDosenView(): View {
         $user = Auth::user();
 
         // Ambil semua data dosen
@@ -58,8 +54,7 @@ class KaprodiController extends Controller
         ]);
     }
 
-    public function kaprodiAddDosen()
-    {
+    public function kaprodiAddDosen() {
         // Ambil semua data kelas
         $kelasList = Kelas::all();
 
@@ -67,8 +62,7 @@ class KaprodiController extends Controller
         return view('kaprodi.add-dosen', compact('kelasList'));
     }
 
-    public function storeDosen(Request $request)
-    {
+    public function storeDosen(Request $request) {
         // Validasi data input
         $request->validate([
             'nip' => 'required|numeric',
@@ -137,8 +131,7 @@ class KaprodiController extends Controller
         }
     }
     // Method untuk menampilkan form edit dosen
-    public function editDosen($id)
-    {
+    public function editDosen($id) {
         // Mengambil data dosen berdasarkan ID
         $dosen = Dosen::findOrFail($id);
 
@@ -158,8 +151,7 @@ class KaprodiController extends Controller
         return view('kaprodi.edit-dosen', compact('dosen', 'kelasList', 'user'));
     }
 
-    public function updateDosen(Request $request, $id)
-    {
+    public function updateDosen(Request $request, $id) {
         // Validasi input
         $request->validate([
             // 'nip' => 'required|numeric',
@@ -201,8 +193,7 @@ class KaprodiController extends Controller
         return redirect()->back()->with('success', 'Data dosen berhasil diupdate!');
     }
 
-    public function deleteDosen($id)
-    {
+    public function deleteDosen($id) {
         // Find the Dosen by ID
         $dosen = Dosen::findOrFail($id);
 
@@ -217,34 +208,31 @@ class KaprodiController extends Controller
         return redirect()->back()->with('success', 'Data dosen berhasil dihapus!');
     }
 
-    public function kaprodiDataKelasView(): View
-    {
+    public function kaprodiDataKelasView(): View {
         $user = Auth::user();
 
         $allDataKelas = Kelas::where('id', '!=', 0)->get();
         return view('kaprodi.kelas')->with(["username" => $user->username, "data" => $allDataKelas]);
     }
 
-    
-    public function kaprodiAddKelas()
-    {
+
+    public function kaprodiAddKelas() {
         return view('kaprodi.add-kelas');
     }
 
-    public function storeKelas(Request $request)
-    {
-    // Validasi data input
-    $request->validate([
-        'nama' => 'required|string|max:255', 
-        'jumlahmaxmahasiswa' => 'required|numeric', 
-    ], [
-        'nama.required' => 'Nama harus diisi.',
-        'nama.string' => 'Nama harus berupa teks.',
-        'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
-        'jumlahmaxmahasiswa.required' => 'Jumlah maksimal mahasiswa harus diisi.',
-        'jumlahmaxmahasiswa.numeric' => 'Jumlah maksimal mahasiswa harus berupa angka.',
-    ]);
-        
+    public function storeKelas(Request $request) {
+        // Validasi data input
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'jumlahmaxmahasiswa' => 'required|numeric',
+        ], [
+            'nama.required' => 'Nama harus diisi.',
+            'nama.string' => 'Nama harus berupa teks.',
+            'nama.max' => 'Nama tidak boleh lebih dari 255 karakter.',
+            'jumlahmaxmahasiswa.required' => 'Jumlah maksimal mahasiswa harus diisi.',
+            'jumlahmaxmahasiswa.numeric' => 'Jumlah maksimal mahasiswa harus berupa angka.',
+        ]);
+
         error_log(" cek data kapasitas {$request->jumlahmaxmahasiswa} ");
 
         Kelas::create([
@@ -254,19 +242,17 @@ class KaprodiController extends Controller
         return redirect()->route('kaprodi.data.kelas')->with('success', 'Kelas berhasil ditambahkan');
     }
 
-    public function editKelas($id)
-    {
+    public function editKelas($id) {
         $kelas = Kelas::findOrFail($id);
 
         return view('kaprodi.edit-kelas', compact('kelas'));
     }
 
-    public function updateKelas(Request $request, $id)
-    {
-       // Validasi data input
+    public function updateKelas(Request $request, $id) {
+        // Validasi data input
         $request->validate([
-            'nama' => 'required|string|max:255', 
-            'jumlahmaxmahasiswa' => 'required|numeric', 
+            'nama' => 'required|string|max:255',
+            'jumlahmaxmahasiswa' => 'required|numeric',
         ], [
             'nama.required' => 'Nama harus diisi.',
             'nama.string' => 'Nama harus berupa teks.',
@@ -288,38 +274,36 @@ class KaprodiController extends Controller
     public function deleteKelas($id) {
         $kelas = Kelas::findOrFail($id);
         $kelas->delete();
-    
+
         return redirect()->route('kaprodi.data.kelas')->with('success', 'Kelas berhasil dihapus!');
     }
 
-    public function kaprodiPenempatanView(): View
-{
-    $user = Auth::user();
-    
-    // Ambil semua data kelas yang memiliki dosen yang terkait
-    $allDataKelas = DB::table('dosens')
-        ->join('kelas', 'dosens.kelas_id', '=', 'kelas.id')
-        ->select('dosens.name as dosen_name', 'kelas.name as kelas_name', 'kelas.kapasitas', 'kelas.id as kelas_id')
-        ->where('kelas.id', '!=', 0) 
-        ->get();
-    
-    // Ambil data mahasiswa berdasarkan kelas_id yang terdaftar
-    $mahasiswaPerKelas = [];
-    foreach ($allDataKelas as $dataKelas) {
-        $mahasiswaPerKelas[$dataKelas->kelas_id] = DB::table('mahasiswas')
-            ->where('kelas_id', $dataKelas->kelas_id)
-            ->get(['id', 'name']);
-    }
-    
-    return view('kaprodi.penempatan')->with([
-        'username' => $user->username,
-        'data' => $allDataKelas,
-        'mahasiswaPerKelas' => $mahasiswaPerKelas,
-    ]);
-}
+    public function kaprodiPenempatanView(): View {
+        $user = Auth::user();
 
-    public function kaprodiAddPenempatan()
-    {
+        // Ambil semua data kelas yang memiliki dosen yang terkait
+        $allDataKelas = DB::table('dosens')
+            ->join('kelas', 'dosens.kelas_id', '=', 'kelas.id')
+            ->select('dosens.name as dosen_name', 'kelas.name as kelas_name', 'kelas.kapasitas', 'kelas.id as kelas_id')
+            ->where('kelas.id', '!=', 0)
+            ->get();
+
+        // Ambil data mahasiswa berdasarkan kelas_id yang terdaftar
+        $mahasiswaPerKelas = [];
+        foreach ($allDataKelas as $dataKelas) {
+            $mahasiswaPerKelas[$dataKelas->kelas_id] = DB::table('mahasiswas')
+                ->where('kelas_id', $dataKelas->kelas_id)
+                ->get(['id', 'name']);
+        }
+
+        return view('kaprodi.penempatan')->with([
+            'username' => $user->username,
+            'data' => $allDataKelas,
+            'mahasiswaPerKelas' => $mahasiswaPerKelas,
+        ]);
+    }
+
+    public function kaprodiAddPenempatan() {
         $user = Auth::user();
 
         // Mendapatkan data kelas yang belum digunakan
@@ -330,7 +314,6 @@ class KaprodiController extends Controller
             ->whereNull('dosens.kelas_id')
             ->select('kelas.*')
             ->get();
-
 
         // Mendapatkan data dosen dengan kelas_id = 0
         $allDataKelas = Dosen::where('kelas_id', 0)
@@ -350,8 +333,7 @@ class KaprodiController extends Controller
         ]);
     }
 
-    public function storePenempatan(Request $request)
-    {
+    public function storePenempatan(Request $request) {
         // Validasi data yang diterima
         $validatedData = $request->validate([
             'mahasiswa_ids' => 'required|array',
@@ -366,52 +348,51 @@ class KaprodiController extends Controller
             'kelas_id.exists' => 'Kelas yang dipilih tidak valid.',
             'dosen_id.required' => 'Dosen yang dipilih tidak boleh kosong.',
             'dosen_id.exists' => 'Dosen yang dipilih tidak valid.'
-        ]);        
-    
+        ]);
+
         // Ambil ID mahasiswa yang dipilih dan ID kelas
         $mahasiswaIds = $validatedData['mahasiswa_ids'];
         $kelasId = $validatedData['kelas_id'];
         $dosenId = $validatedData['dosen_id'];
-    
+
         // Update kelas_id untuk mahasiswa yang dipilih
         DB::table('mahasiswas')
             ->whereIn('id', $mahasiswaIds)
             ->update(['kelas_id' => $kelasId]);
-    
+
         // Update kelas_id untuk dosen dengan ID yang dipilih
         DB::table('dosens')
             ->where('id', $dosenId)
             ->update(['kelas_id' => $kelasId]);
-    
+
         // Redirect atau beri respons sesuai kebutuhan
         return redirect()->route('kaprodi.data.penempatan')->with('success', 'Data penempatan mahasiswa dan dosen berhasil disimpan.');
-    }    
+    }
 
-    public function editPenempatan($id)
-    {
+    public function editPenempatan($id) {
         // Mengambil data kelas berdasarkan ID
         $kelas = Kelas::findOrFail($id);
-    
+
         // Mengambil nama dosen yang terkait dengan kelas ini
         $dosen = Dosen::where('kelas_id', $id)->first();
-    
+
         // Mengambil semua mahasiswa dengan kelas_id 0 dan kelas_id sesuai $id
         $mahasiswaList = DB::table('mahasiswas')
-        ->select('*')
-        ->where('kelas_id', $id)
-        ->union(
-            DB::table('mahasiswas')
-                ->select('*')
-                ->where('kelas_id', 0)
-        )
-        ->get();
+            ->select('*')
+            ->where('kelas_id', $id)
+            ->union(
+                DB::table('mahasiswas')
+                    ->select('*')
+                    ->where('kelas_id', 0)
+            )
+            ->get();
 
         // Mengambil ID mahasiswa yang sudah dipilih untuk kelas ini
         $selectedMahasiswaIds = DB::table('mahasiswas')
             ->where('kelas_id', $id)
             ->pluck('id')
             ->toArray();
-    
+
         // Mengirim data ke view
         return view('kaprodi.edit-penempatan', [
             'kelas' => $kelas,
@@ -420,39 +401,35 @@ class KaprodiController extends Controller
             'selectedMahasiswaIds' => $selectedMahasiswaIds,
         ]);
     }
-    
-    public function updatePenempatan(Request $request, $id)
-    {
+
+    public function updatePenempatan(Request $request, $id) {
         $request->validate([
             'mahasiswa_ids' => 'array|nullable',
             'mahasiswa_ids.*' => 'integer|exists:mahasiswas,id',
         ]);
-    
-        
+
+
         $kelas = Kelas::findOrFail($id);
-    
+
         $selectedMahasiswaIds = $request->input('mahasiswa_ids', []);
-    
+
         Mahasiswa::whereIn('id', $selectedMahasiswaIds)->update(['kelas_id' => $id]);
 
         Mahasiswa::where('kelas_id', $id)
-                  ->whereNotIn('id', $selectedMahasiswaIds)
-                  ->update(['kelas_id' => 0]);
+            ->whereNotIn('id', $selectedMahasiswaIds)
+            ->update(['kelas_id' => 0]);
 
         return redirect()->route('kaprodi.edit.penempatan', $id)
-                         ->with('success', 'Data penempatan mahasiswa telah diperbarui.');
-    }    
+            ->with('success', 'Data penempatan mahasiswa telah diperbarui.');
+    }
 
-    public function deletePenempatan($id) 
-    {
+    public function deletePenempatan($id) {
         $kelas = Kelas::findOrFail($id);
 
         Dosen::where('kelas_id', $id)->update(['kelas_id' => 0]);
 
         Mahasiswa::where('kelas_id', $id)->update(['kelas_id' => 0]);
-        
+
         return redirect()->route('kaprodi.data.penempatan')->with('success', 'Data penempatan mahasiswa berhasil dihapus!');
     }
-
-
 }
