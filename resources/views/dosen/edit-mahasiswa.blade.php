@@ -8,11 +8,13 @@
     <main class="w-full flex-grow p-6">
         <div class="grid grid-cols-2 gap-2 items-center pb-2">
             <h1 class="text-3xl text-black">Edit Mahasiswa</h1>
-            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-40 justify-self-end">
-                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            <a href="{{ route('dosen.data.mahasiswa') }}"
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none w-40 justify-self-end flex items-center justify-center">
+                <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>
                 Kembali
-            </button>
+            </a>
         </div>
+
 
 
         @if(session('success'))
@@ -68,7 +70,7 @@
 
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" value="{{$mahasiswa->user->email}}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <input type="email" id="email" name="email" value="{{$mahasiswa->user->email}}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" readonly>
                 </div>
 
                 <div class="mb-4">

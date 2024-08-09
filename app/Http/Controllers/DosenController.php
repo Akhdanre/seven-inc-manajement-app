@@ -45,7 +45,7 @@ class DosenController extends Controller {
         $user = Auth::user();
         $dataDosen = Dosen::where("user_id", $user->id)->first();
         $data = [];
-        if (isset($dataDosen->kelas_id)) {
+        if (isset($dataDosen->kelas_id) && $dataDosen->kelas_id != 0) {
             $data = Mahasiswa::where("kelas_id", $dataDosen->kelas_id)->get();
         }
 
