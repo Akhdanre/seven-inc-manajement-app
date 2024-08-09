@@ -35,32 +35,31 @@
 
                 <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg mx-auto mt-10">
                 <form action="{{ route('kaprodi.store.penempatan') }}" method="POST">
-                    @csrf
+                @csrf
 
-                    <!-- Dropdown Nama Kelas -->
-                    <div class="mb-4">
-                        <label for="kelas_id" class="block text-sm font-medium text-gray-700">Nama Kelas</label>
-                        <select name="kelas_id" id="kelas_id" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                            <option value="" disabled selected>Pilih Kelas</option>
-                            @foreach($kelasList as $kelas)
-                                <option value="{{ $kelas->id }}">{{ $kelas->name }} (maks. {{ $kelas->kapasitas }} Mahasiswa )</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <!-- Dropdown Nama Kelas -->
+                <div class="mb-4">
+                    <label for="kelas_id" class="block text-sm font-medium text-gray-700">Nama Kelas</label>
+                    <select name="kelas_id" id="kelas_id" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                        <option value="" disabled selected>Pilih Kelas</option>
+                        @foreach($kelasList as $kelas)
+                            <option value="{{ $kelas->id }}" data-kapasitas="{{ $kelas->kapasitas }}">{{ $kelas->name }} (maks. {{ $kelas->kapasitas }} Mahasiswa)</option>
+                        @endforeach
+                    </select>
+                </div>
 
-                    <!-- Dropdown Nama Dosen -->
-                    <div class="mb-4">
-                        <label for="dosen_id" class="block text-sm font-medium text-gray-700">Nama Dosen Wali</label>
-                        <select name="dosen_id" id="dosen_id" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
-                            <option value="" disabled selected>Pilih Nama Dosen</option>
-                            @foreach($data as $dosen)
-                                <option value="{{ $dosen->id }}">{{ $dosen->dosen_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <!-- Dropdown Nama Dosen -->
+                <div class="mb-4">
+                    <label for="dosen_id" class="block text-sm font-medium text-gray-700">Nama Dosen Wali</label>
+                    <select name="dosen_id" id="dosen_id" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                        <option value="" disabled selected>Pilih Nama Dosen</option>
+                        @foreach($data as $dosen)
+                            <option value="{{ $dosen->id }}">{{ $dosen->dosen_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-
-                  <!-- Daftar Mahasiswa dengan kelas_id 0 -->
+                <!-- Daftar Mahasiswa dengan kelas_id 0 -->
                 <div class="mb-4">
                     <label class="block text-sm font-medium text-gray-700">Pilih Mahasiswa</label>
                     <div class="mb-2 mt-3 text-sm text-gray-600">
@@ -84,42 +83,70 @@
                         @endforeach
                     </div>
 
-                     <!-- Area untuk menampilkan jumlah mahasiswa yang dipilih -->
-                        <div class="mt-4">
-                            <strong class="text-sm text-gray-700">Jumlah Mahasiswa yang Dipilih: </strong>
-                            <div id="selectedCount" class="text-sm text-gray-900 mt-2">
-                                0 mahasiswa terpilih
-                            </div>
+                    <!-- Area untuk menampilkan jumlah mahasiswa yang dipilih -->
+                    <div class="mt-4">
+                        <strong class="text-sm text-gray-700">Jumlah Mahasiswa yang Dipilih: </strong>
+                        <div id="selectedCount" class="text-sm text-gray-900 mt-2">
+                            0 mahasiswa terpilih
                         </div>
                     </div>
+                </div>
 
-                    <script>
-                        function updateSelectedStudents() {
-                            const selectedCount = document.querySelectorAll('input[name="mahasiswa_ids[]"]:checked').length;
-                            document.getElementById('selectedCount').textContent = `${selectedCount} mahasiswa terpilih`;
+                <script>
+                    let maxCapacity = 0;
+
+                    function updateMaxCapacity() {
+                        const kelasSelect = document.getElementById('kelas_id');
+                        const selectedOption = kelasSelect.options[kelasSelect.selectedIndex];
+                        maxCapacity = parseInt(selectedOption.getAttribute('data-kapasitas'), 10);
+                        updateSelectedStudents();
+                    }
+
+                    function updateSelectedStudents() {
+                        const checkboxes = document.querySelectorAll('input[name="mahasiswa_ids[]"]:checked');
+                        const selectedCount = checkboxes.length;
+                        document.getElementById('selectedCount').textContent = `${selectedCount} mahasiswa terpilih`;
+
+                        if (selectedCount >= maxCapacity) {
+                            document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach((checkbox) => {
+                                if (!checkbox.checked) {
+                                    checkbox.disabled = true;
+                                }
+                            });
+                        } else {
+                            document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach((checkbox) => {
+                                checkbox.disabled = false;
+                            });
                         }
+                    }
 
-                        document.getElementById('selectAll').addEventListener('click', function(e) {
-                            e.preventDefault();
-                            document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach(checkbox => {
+                    document.getElementById('kelas_id').addEventListener('change', updateMaxCapacity);
+
+                    document.getElementById('selectAll').addEventListener('click', function(e) {
+                        e.preventDefault();
+                        document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach(checkbox => {
+                            if (checkbox.disabled === false) {
                                 checkbox.checked = true;
-                            });
-                            updateSelectedStudents();
+                            }
                         });
+                        updateSelectedStudents();
+                    });
 
-                        document.getElementById('deselectAll').addEventListener('click', function(e) {
-                            e.preventDefault();
-                            document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach(checkbox => {
-                                checkbox.checked = false;
-                            });
-                            updateSelectedStudents();
+                    document.getElementById('deselectAll').addEventListener('click', function(e) {
+                        e.preventDefault();
+                        document.querySelectorAll('input[name="mahasiswa_ids[]"]').forEach(checkbox => {
+                            checkbox.checked = false;
                         });
-                    </script>
-                    <!-- Submit Button -->
-                    <div>
-                        <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Tambah Data</button>
-                    </div>
-                </form>
+                        updateSelectedStudents();
+                    });
+                </script>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Tambah Data</button>
+                </div>
+            </form>
+
                 </div>
 
             </main>
