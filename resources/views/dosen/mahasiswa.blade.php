@@ -68,7 +68,7 @@
               <td class="text-left py-3 px-4">{{ $mahasiswa->birth_place }}, {{ $mahasiswa->birth_date }}</td>
               @if ($mahasiswa->edit_status == true)
               <td class="text-left py-3 px-4">
-                <button class="bg-green-500 text-white text-sm px-2 py-1 rounded" onclick="showPopup('{{ $mahasiswa->requestUpdate }}', '{{ $mahasiswa->id }}', '{{ $mahasiswa->name }}')">ada</button>
+                <button class="bg-green-500 text-white text-sm px-2 py-1 rounded" onclick="showPopup('{{ $mahasiswa->requestUpdate }}', '{{ $mahasiswa->nim }}', '{{ $mahasiswa->name }}')">ada</button>
               </td>
               @else
               <td class="text-left py-3 px-4">
@@ -103,9 +103,13 @@
     <form action="" method="POST">
       @csrf
       <div class="mb-4">
+        <label for="popup-mahasiswa-id">NIM:</label>
         <input id="popup-mahasiswa-id" name="mahasiswa_id" disabled>
+
+        <label for="popup-kelas-id">Nama:</label>
         <input id="popup-kelas-id" name="kelas_id" disabled>
-        <label class="block font-bold mb-2" for="keterangan">Keterangan</label>
+
+        <label class="block font-bold mb-2 mt-2" for="keterangan">Keterangan</label>
         <div id="dynamic-fields" class="mb-4"></div>
       </div>
       <div class="flex justify-end">
