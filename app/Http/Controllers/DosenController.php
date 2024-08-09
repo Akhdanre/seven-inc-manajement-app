@@ -75,9 +75,11 @@ class DosenController extends Controller {
         try {
             $data = $request->validated();
 
-            if (User::where('email', $data['email'])->exists()) {
-                return redirect()->back()->with('error', 'Email sudah digunakan.');
+
+            if (User::where('email', $data['email'])->orWhere('username', $data['username'])->exists()) {
+                return redirect()->back()->with('error', 'Email atau Username sudah digunakan.');
             }
+
 
             $user = Auth::user();
             $dataDosen = Dosen::where("user_id", $user->id)->first();
@@ -101,7 +103,7 @@ class DosenController extends Controller {
                 "birth_date" => $data['birth_date']
             ]);
 
-            return redirect()->back()->with('success', 'Data mahasiswa berhasil ditambahkan!');
+            return redirect()->route('dosen.data.mahasiswa')->with('success', 'Data mahasiswa berhasil ditambahkan!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
