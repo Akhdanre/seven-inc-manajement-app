@@ -16,7 +16,18 @@
     <form class="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4" method="POST" action="{{ route('actionLogin')}}">
       @csrf
       <div class="mb-4">
-        <h2 class="text-2xl text-black pb-6 text-center">Silahkan Masuk</h2>
+        <h2 class="text-2xl text-black pb-6 text-center">Silahkan Masuk</h2> public function actionAbsence(Request $request) {
+
+          $result =  $this->absenceService->absenceAction();
+  
+          $data = [];
+          if (!$result->getIsSuccess()) {
+              $data["error"] = $result->getMessage();
+          }
+          return redirect()->route("user.home")->with($data);
+      }
+  
+  jika seperti ini apakah harus 
         <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
           Email
         </label>

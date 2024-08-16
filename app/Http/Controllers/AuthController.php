@@ -8,16 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller {
 
-    public function login(): View
-    {
+    public function login(): View {
         return view("login");
     }
 
-    public function actionLogin(LoginRequest $request)
-    {
+    public function actionLogin(LoginRequest $request) {
         $credentials = $request->validated();
 
         if (Auth::attempt($credentials)) {
@@ -37,8 +34,7 @@ class AuthController extends Controller
         }
     }
 
-    public function actionLogout(Request $request)
-    {
+    public function actionLogout(Request $request) {
         Auth::logout();
 
         $request->session()->invalidate();

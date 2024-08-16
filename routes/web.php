@@ -33,7 +33,7 @@ Route::prefix('dosen')->middleware('role:2')->group(function () {
     Route::delete('/action/data/mahasiswa/delete/{id}', [DosenController::class, 'actionDeleteDataMahasiswa'])->name("dosen.delete.data.mahasiswa");
 });
 
-// Group for Kaprodi
+// Group for Kaprodi    
 Route::prefix('kaprodi')->middleware('role:1')->group(function () {
     Route::get('/home', [KaprodiController::class, 'kaprodiView'])->name("kaprodi.home");
     Route::get('/data/dosen', [KaprodiController::class, 'kaprodiDataDosenView'])->name("kaprodi.data.dosen");
